@@ -169,3 +169,7 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# gitignorefrom the backend folder .venv and .idea
+./backend/.venv
+./backend/.idea
