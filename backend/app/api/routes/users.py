@@ -1,9 +1,11 @@
+from sys import prefix
+
 from fastapi import APIRouter, Depends
 from sqlalchemy import Select
 from sqlalchemy.orm import Session
 
-from app.api.routes.auth import hastoken
 from app.api.schemas import schemas
+from app.core.auth import Authenticate
 from app.core.hashing import hash_password
 from app.db.base import get_db
 from app.db.models.models import UserModel
@@ -11,7 +13,8 @@ from app.exceptions import raise_exception
 from app.utils.sql_utils import SqlInsert, SqlExe
 
 router = APIRouter(
-    tags=["Users"]
+    prefix="/users",
+    tags=["users"],
 )
 
 @router.post("/create_user", response_model=schemas.UserCreate)
@@ -29,9 +32,10 @@ def create_user(user: schemas.GetUser, db: Session = Depends(get_db)) -> UserMod
     return user_created
 
 
-@hastoken
 @router.post("/get_user", response_model=list[schemas.GetUser])
-def get_user(user: schemas.UserCreate, db: Session = Depends(get_db)) -> UserModel:
+def get_user(user: schemas.UserCreate,
+             db: Session = Depends(get_db),
+             current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
     query = Select(
         UserModel.username,
         UserModel.email
