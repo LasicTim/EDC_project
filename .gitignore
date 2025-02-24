@@ -171,5 +171,7 @@ cython_debug/
 .pypirc
 
 # gitignorefrom the backend folder .venv and .idea
-./backend/.venv
-./backend/.idea
+
+/.idea
+/backend/.idea
+
