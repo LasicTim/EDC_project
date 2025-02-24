@@ -1,0 +1,37 @@
+from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+
+from app.db.models.base import BaseSQLModel
+from app.utils.time import current_date
+
+
+class UserModel(BaseSQLModel):
+    __tablename__ = "users"
+    username = Column(String(50), unique=True, index=True, nullable=False)
+    email = Column(String(255), unique=True, index=True, nullable=False)
+    hashed_password = Column(String(255), nullable=False)
+    is_superuser = Column(Boolean, default=False)
+    first_name = Column(String(100))
+    last_name = Column(String(100))
+    birth_date = Column(DateTime, default=current_date())
+    phone_number = Column(String(20))
+    address = Column(String(100))
+    city = Column(String(50))
+    country = Column(String(50))
+    IdCompany = Column(String(36), ForeignKey('companies.Id'), nullable=True, index=True,)
+
+    # Relationships
+    company = relationship("Company", back_populates="users")
+
+class CompanyModel(BaseSQLModel):
+    __tablename__ = "companies"
+    name = Column(String(100), unique=True, index=True, nullable=False)
+    email = Column(String(255), unique=True, index=True, nullable=False)
+    phone_number = Column(String(20))
+    address = Column(String(100))
+    city = Column(String(50))
+    country = Column(String(50))
+
+    # Relationships
+    users = relationship("User", back_populates="company")
+    
