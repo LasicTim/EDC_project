@@ -14,8 +14,8 @@ router = APIRouter(
     tags=["Users"]
 )
 
-@router.post("/create_user", response_model=schemas.UserBase)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)) -> UserModel:
+@router.post("/create_user", response_model=schemas.UserCreate)
+def create_user(user: schemas.UserBase, db: Session = Depends(get_db)) -> UserModel:
     query = Select(
         UserModel.username,
         UserModel.hashed_password
@@ -24,7 +24,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)) -> User
     if existing_user:
         raise_exception(status_code=400, detail="User already exists")
 
-    user_model = UserModel(username=user.username, email=user.email, password=hash_password(user.password))
+    user_model = UserModel(username=user.username, email=user.email, hashed_password=hash_password(user.password))
     user_created = SqlInsert(db, user_model)
     return user_created
 

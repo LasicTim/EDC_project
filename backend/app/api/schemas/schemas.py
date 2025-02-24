@@ -9,24 +9,20 @@ from app.api.schemas.base import BaseSchema
 class UserBase(BaseSchema):
     username: str
     email: str
-    full_name: str = None
     first_name: str = None
     last_name: str = None
-    birth_date: datetime.date = None
+    birth_date: datetime = None
     phone_number: str = None
     address: str = None
     city: str = None
     country: str = None
-
-
-class UserCreate(UserBase):
-    username: str
     password: str
 
+class UserCreate(BaseSchema):
+    username: str
 
 class UserUpdate(UserBase):
     username: str = None
-    password: str = None
 
 
 class CompanyBase(BaseSchema):

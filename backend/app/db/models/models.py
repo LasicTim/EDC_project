@@ -21,7 +21,7 @@ class UserModel(BaseSQLModel):
     IdCompany = Column(String(36), ForeignKey('companies.Id'), nullable=True, index=True,)
 
     # Relationships
-    company = relationship("Company", back_populates="users")
+    company = relationship("CompanyModel", back_populates="users")
 
 class CompanyModel(BaseSQLModel):
     __tablename__ = "companies"
@@ -33,5 +33,5 @@ class CompanyModel(BaseSQLModel):
     country = Column(String(50))
 
     # Relationships
-    users = relationship("User", back_populates="company")
+    users = relationship("UserModel", back_populates="company")
     
