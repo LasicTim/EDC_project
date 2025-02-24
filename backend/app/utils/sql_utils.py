@@ -1,13 +1,14 @@
-from sqlalchemy import Engine, table, column, insert
 from sqlalchemy.orm import Session
-
+from sqlalchemy.sql import ClauseElement
 from app.db.models.base import BaseSQLModel
 
 
 # querry a sql alchemy select with joins and where's IT IS NOT A STRING
-def SqlExe(db: Session, query):
+def SqlExe(db: Session, query: ClauseElement):
     result = db.execute(query)
-    return result.fetchall()
+    return result
+
+
 
 
 

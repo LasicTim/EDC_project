@@ -18,12 +18,22 @@ class UserBase(BaseSchema):
     country: str = None
     password: str
 
-class UserCreate(BaseSchema):
+class UserCreate(BaseModel):
     username: str
 
-class UserUpdate(UserBase):
+class UserUpdate(BaseSchema):
     username: str = None
 
+class GetUser(BaseModel):
+    username: str
+    email: str
+    first_name: str = None
+    last_name: str = None
+    birth_date: datetime = None
+    phone_number: str = None
+    address: str = None
+    city: str = None
+    country: str = None
 
 class CompanyBase(BaseSchema):
     name: str

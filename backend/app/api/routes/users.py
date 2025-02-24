@@ -15,7 +15,7 @@ router = APIRouter(
 )
 
 @router.post("/create_user", response_model=schemas.UserCreate)
-def create_user(user: schemas.UserBase, db: Session = Depends(get_db)) -> UserModel:
+def create_user(user: schemas.GetUser, db: Session = Depends(get_db)) -> UserModel:
     query = Select(
         UserModel.username,
         UserModel.hashed_password
@@ -30,8 +30,8 @@ def create_user(user: schemas.UserBase, db: Session = Depends(get_db)) -> UserMo
 
 
 @hastoken
-@router.post("/get_user", response_model=schemas.UserBase)
-def get_user(user: schemas.UserBase, db: Session = Depends(get_db)) -> UserModel:
+@router.post("/get_user", response_model=list[schemas.GetUser])
+def get_user(user: schemas.UserCreate, db: Session = Depends(get_db)) -> UserModel:
     query = Select(
         UserModel.username,
         UserModel.email
