@@ -23,7 +23,7 @@ def create_company(company: companies.CompanyCreate,
         CompanyModel.Id,
         CompanyModel.name,
         CompanyModel.email
-    ).where(and_(CompanyModel.name == company.name, CompanyModel.email == company.email))
+    ).where(and_(CompanyModel.name == company.name, CompanyModel.email == company.email, CompanyModel.Active == True))
     existing_company = SqlExe(db,query)
     if existing_company:
         raise_exception(status_code=400, detail="company already exists")
@@ -46,7 +46,7 @@ def get_company(company: companies.GetCompany,
         CompanyModel.country
     )
 
-    query.where(and_(CompanyModel.name == company.name,CompanyModel.email == company.email ))
+    query.where(and_(CompanyModel.name == company.name,CompanyModel.email == company.email, CompanyModel.Active == True)) 
     company_found = SqlExe(db, query)
     if not company_found:
         raise_exception(status_code=404, detail="company not found")
