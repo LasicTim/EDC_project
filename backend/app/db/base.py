@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+
 from app.core.config import settings
 
 # Construct the MySQL database URL
@@ -25,4 +26,8 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def get_engine():
+    """Dependency to get the database engine."""
+    return engine
 

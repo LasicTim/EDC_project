@@ -1,13 +1,12 @@
-import jwt
-from fastapi import Depends
-from jwt import PyJWTError, InvalidTokenError
 from datetime import timedelta
 from typing import Optional, Annotated
 
+import jwt
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
+from jwt import PyJWTError, InvalidTokenError
 from sqlalchemy.orm import Session
 
-from app.api.schemas.schemas import TokenData
 from app.core.config import settings
 from app.db.base import get_db
 from app.exceptions import raise_401_exception

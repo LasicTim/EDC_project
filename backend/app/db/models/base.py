@@ -1,16 +1,10 @@
-from app.db.base import Base
 from sqlalchemy import (
     Column,
-    Integer,
-    String,
     DateTime,
-    ForeignKey,
-    Table, Boolean
+    Boolean
 )
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.ext.hybrid import hybrid_property
 
+from app.db.base import Base
 from app.utils.helpers import UUID, New_UUID
 from app.utils.time import current_datetime
 

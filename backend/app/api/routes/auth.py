@@ -1,5 +1,6 @@
 # this file is for authentication purposes
 from fastapi import APIRouter, Depends
+from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -9,7 +10,6 @@ from app.core.hashing import verify_password
 from app.db.base import get_db
 from app.db.models.models import UserModel
 from app.exceptions import raise_exception
-from fastapi.responses import RedirectResponse
 
 router = APIRouter(
     tags=["auth"]
