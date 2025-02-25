@@ -44,4 +44,4 @@ def get_user(user: schemas.UserCreate,
     user_found = SqlExe(db, query)
     if not user_found:
         raise_exception(status_code=404, detail="User not found")
-    return user_found
+    return user_found 
