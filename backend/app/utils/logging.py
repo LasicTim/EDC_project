@@ -1,6 +1,6 @@
 import logging
 
-
+#currnetly not used
 def setup_logging():
     logging.basicConfig(
         level=logging.INFO,

@@ -14,6 +14,9 @@ class CompanyBase(BaseModel):
     city: Optional[str] = None
     country: Optional[str] = None
 
+    class Config:
+        from_attributes = True
+
 class CompanyCreate(BaseModel):
     name: str
     email: str

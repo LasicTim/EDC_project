@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy import Select, and_, update
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.api.schemas import schemas, companies, users
 from app.core.auth import Authenticate
 from app.core.hashing import hash_password
 from app.db.base import get_db
-from app.db.models.models import UserModel
+from app.db.models.models import UserModel, CompanyModel
 from app.exceptions import raise_exception
-from app.utils.sql_utils import SqlInsert, SqlExe, SqlExeAndCommit
+from app.utils.sql_utils import SqlInsert, SqlExe, SqlExeAndCommit, SqlExeWithMapping
 from app.utils.email import is_valid_email, is_valid_password
 from app.utils.time import current_datetime
 
@@ -43,7 +43,24 @@ def get_user(user: users.UserCreate,
     user_found = SqlExe(db, query)
     if not user_found:
         raise_exception(status_code=404, detail="User not found")
-    return user_found 
+    return user_found
+
+@router.post("/get_user_with_company", response_model=list[users.GeUserWithCompanyData])
+def get_user_with_company(user: users.UserCreate,
+             db: Session = Depends(get_db),
+             current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
+    query = (Select(
+        UserModel.username,
+        UserModel.email,
+        CompanyModel.name.label("companyName"),
+        CompanyModel.email.label("companyEmail")
+    )
+             .outerjoin(CompanyModel, CompanyModel.Id == UserModel.IdCompany)
+             .where(and_(UserModel.username == user.username, UserModel.Active == True, CompanyModel.Active == True)))
+    user_found = SqlExe(db,query)
+    if not user_found:
+        raise_exception(status_code=404, detail="User not found")
+    return user_found
 
 @router.post("/update_user", response_model=users.UserCreate)
 def update_user(user: users.GetUser,

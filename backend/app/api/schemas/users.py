@@ -4,6 +4,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 from app.api.schemas.base import BaseSchema
+from app.api.schemas.companies import CompanyBase
 
 
 class UserBase(BaseSchema):
@@ -41,3 +42,13 @@ class GetUser(BaseModel):
     city: Optional[str] = None
     country: Optional[str] = None
     IdCompany: Optional[str] = None
+    company: CompanyBase | None = None
+    
+    class Config:
+        from_attributes = True
+
+class GeUserWithCompanyData(BaseModel):
+    username: str
+    email: str
+    companyName: str
+    companyEmail: str

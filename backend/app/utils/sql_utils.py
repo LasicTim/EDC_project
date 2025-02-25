@@ -25,3 +25,8 @@ def SqlExeAndCommit(db: Session, query: ClauseElement):
     result = db.execute(query)
     db.commit()
     return result
+
+
+def SqlExeWithMapping(db: Session, query: ClauseElement):
+    result = db.execute(query).mappings().all()
+    return result
