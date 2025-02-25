@@ -6,7 +6,7 @@ const App: React.FC = () => {
   const [content, setContent] = useState("");
 
   return (
-    <> {/* React Fragment to wrap multiple elements */}
+    <> 
       <Header /> {/* Add Header component */}
       <div style={{ padding: "20px" }}>
         <h1>TinyMCE 7.7 Without API Key (Local)</h1>
@@ -17,7 +17,7 @@ const App: React.FC = () => {
           init={{
             height: 400,
             menubar: false,
-            plugins: "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount",
+            plugins: "advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount ",
             toolbar:
               "undo redo | formatselect | bold italic backcolor | \
               alignleft aligncenter alignright alignjustify | \
