@@ -1,0 +1,105 @@
+.login-page {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.Field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Error {
+    text-align: center;
+    color: red;
+    font-size: 0.8rem;
+}
+
+.Field label {
+    flex: 0 0 30%; /* Takes up 30% of the space */
+    text-align: right;
+}
+
+.InputFields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+
+.p-card {
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.p-card .p-card-title {
+    font-size: 2rem;
+    color: #495057;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.p-card .p-card-content {
+    padding: 2rem;
+}
+
+.p-inputtext,
+.p-password input {
+    border-radius: 8px !important;
+    transition: all 0.3s ease;
+}
+
+.p-inputtext:hover,
+.p-password input:hover {
+    border-color: #2196F3 !important;
+}
+
+.p-inputtext:focus,
+.p-password input:focus {
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+    border-color: #2196F3 !important;
+}
+
+label {
+    color: #495057;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.p-button {
+    height: 2rem;
+    font-size: 1.0rem;
+    transition: all 0.3s ease;
+    background-color: #2196F3 ; 
+}
+
+.p-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.2);
+    background-color: green;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 480px) {
+    .p-card {
+        width: 90% !important;
+        margin: 1rem;
+    }
+
+    .p-card .p-card-title {
+        font-size: 1.5rem;
+    }
+
+    .p-card .p-card-content {
+        padding: 1rem;
+    }
+}

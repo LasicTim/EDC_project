@@ -1,0 +1,51 @@
+.p-menubar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+
+
+.p-menubar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 100%;
+    background-color: rgba(255, 153, 153, 0.7);
+    transition: width 0.6s ease;
+    z-index: 0;
+}
+.p-menubar:has(.logout-button:hover)::before {
+    width: 100%;
+}
+
+
+/* Keep existing button styles */
+.p-button.p-button-text {
+    position: relative;
+    z-index: 1;
+    color: var(--primary-color);
+    background-color: transparent;
+    border: none;
+    margin-left: auto;
+    transition: none;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+
+.p-button.p-button-text:hover {
+    color: black;
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
+    border: none;
+    margin-left: auto;
+    transition: none;
+    box-shadow: none !important;
+    transform: none !important;
+}
