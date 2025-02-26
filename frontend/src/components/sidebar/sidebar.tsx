@@ -8,19 +8,10 @@ const Menu: React.FC = () => {
     const navigate = useNavigate();
     const items = [
         {
-            label: 'Documents',
+            label: 'Dokumenti',
             icon: 'pi pi-fw pi-folder',
-            expanded: true,
-            items: [
-                {
-                    label: 'New',
-                    icon: 'pi pi-fw pi-plus',
-                },
-                {
-                    label: 'View All',
-                    icon: 'pi pi-fw pi-eye'
-                }
-            ],
+            
+            command: () => navigate('/'),
         },
         {
             label: 'Podjetja',
