@@ -11,6 +11,14 @@ export const auth = {
     
     removeToken: (): void => {
       localStorage.removeItem('access_token');
+      localStorage.removeItem('username');
+      localStorage.removeItem('userid');
       window.dispatchEvent(new Event('auth-change'));
-    }
+    },
+
+    setUser: (username: string, userid: string): void => {
+        localStorage.setItem('username', username);
+        localStorage.setItem('userid', userid);
+        window.dispatchEvent(new Event('auth-change'));
+    },
   };

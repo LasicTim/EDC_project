@@ -49,3 +49,10 @@
     box-shadow: none !important;
     transform: none !important;
 }
+
+
+.user-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

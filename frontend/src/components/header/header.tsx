@@ -21,12 +21,19 @@ const Header: React.FC = () => {
       ];
 
     const end = (
-        <Button 
-            label="Izpis" 
-            icon="pi pi-power-off" 
-            className="p-button-text logout-button" 
-            onClick={deleteAccessToken} 
-        />
+        /* display user from localstorage */
+        <div className="user-info">
+            <div>
+                <span>Vpisan: {localStorage.getItem('username')}</span>
+            </div>
+
+            <Button 
+                label="Izpis" 
+                icon="pi pi-power-off" 
+                className="p-button-text logout-button" 
+                onClick={deleteAccessToken} 
+            />
+        </div>
     );
 
     return (
