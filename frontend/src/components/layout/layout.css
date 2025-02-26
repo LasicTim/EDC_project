@@ -1,0 +1,47 @@
+.app-container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .menu-container {
+    width: 250px;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    padding: 20px;
+  }
+  
+  .content-container.auth-page {
+    margin-left: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .content-container {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  /* Add responsive breakpoints */
+  @media screen and (max-width: 768px) {
+    .menu-container {
+      width: 200px;
+      padding: 15px;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    .menu-container {
+      width: 70px;
+      padding: 10px;
+    }
+    
+    /* Hide text labels on small screens */
+    .p-panelmenu .p-menuitem-text {
+      display: none;
+    }
+    
+  
+  }
