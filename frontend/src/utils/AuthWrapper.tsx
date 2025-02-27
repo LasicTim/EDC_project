@@ -9,7 +9,7 @@ const AuthWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     // Initial check
     const checkAuth = () => {
-      const token = localStorage.getItem('access_token');
+      const token = localStorage.getItem('token');
       setIsAuthenticated(!!token);
       
       if (!token && location.pathname !== '/login' && location.pathname !== '/signup') {
@@ -21,7 +21,7 @@ const AuthWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     // Listen for storage changes
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'access_token') {
+      if (e.key === 'token') {
         setIsAuthenticated(!!e.newValue);
         if (!e.newValue && location.pathname !== '/login' && location.pathname !== '/signup') {
           navigate('/login');

@@ -8,14 +8,28 @@ const Menu: React.FC = () => {
     const navigate = useNavigate();
     const items = [
         {
-            label: 'Dokumenti',
-            icon: 'pi pi-fw pi-folder',
-            
+            label: 'Osebni potatki',
+            icon: 'pi pi-fw pi-user',
             command: () => navigate('/'),
         },
         {
-            label: 'Podjetja',
-            icon: 'pi pi-fw pi-briefcase',
+            label: 'Evidenca delovnega časa',
+            icon: 'pi pi-fw pi-clock',
+            command: () => navigate('/'),
+        },
+        {
+            label: 'Predloge',
+            icon: 'pi pi-fw pi-file',
+            command: () => navigate('/'),
+        },
+        {
+            label: 'Dokumenti',
+            icon: 'pi pi-fw pi-book',
+            command: () => navigate('/'),
+        },
+        {
+            label: 'Podjetje',
+            icon: 'pi pi-fw pi-building',
             command: () => navigate('/companies'),
         },
         // Add more menu items as needed

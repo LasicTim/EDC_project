@@ -8,11 +8,15 @@ import axios from 'axios';
 import { api } from '../../api';
 import { redirect, useNavigate } from 'react-router-dom';
 import { auth } from '../../utils/auth';
+import { jwtDecode } from 'jwt-decode';
+import { useUser } from '../../utils/UserContext';
+import { TokenData } from '../../utils/UserContext';
 
 const LogIn: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const { setUser } = useUser();
     const navigate = useNavigate();
     
     const handleLogin = async () => {
@@ -29,8 +33,17 @@ const LogIn: React.FC = () => {
             });
             console.log('data:', response);
             if (response.data && response.data.access_token) {
-                auth.setToken(response.data.access_token);
-                auth.setUser(response.data.username, response.data.userid);
+
+                const token = response.data.access_token;
+                auth.setToken(token);
+                // Decode token and set user in context
+                const decoded = jwtDecode<TokenData>(token);
+                
+                setUser({
+                    username: decoded.sub?.username,
+                    Id: decoded.sub.Id
+                });
+                
                 console.log('Login successful:', response.data);
                 navigate('/');
             }

@@ -18,7 +18,7 @@ class UserModel(BaseSQLModel):
     address = Column(String(100))
     city = Column(String(50))
     country = Column(String(50))
-    IdCompany = Column(String(36), ForeignKey('companies.Id'), nullable=True, index=True,)
+    IdCompany = Column(String(36), ForeignKey('companies.Id'), nullable=True, index=True)
 
     # Relationships
     company = relationship("CompanyModel", back_populates="users")

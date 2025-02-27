@@ -32,7 +32,6 @@ const Companies: React.FC = () => {
             console.log('data:', response);
             if (response.data && response.data.access_token) {
                 auth.setToken(response.data.access_token);
-                auth.setUser(response.data.username, response.data.userid);
                 console.log('Login successful:', response.data);
                 navigate('/');
             }

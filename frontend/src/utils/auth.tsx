@@ -1,24 +1,36 @@
-export const auth = {
-    isAuthenticated: (): boolean => {
-      const token = localStorage.getItem('access_token');
-      return !!token;
-    },
-    
-    setToken: (token: string): void => {
-      localStorage.setItem('access_token', token);
-      window.dispatchEvent(new Event('auth-change'));
-    },
-    
-    removeToken: (): void => {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('username');
-      localStorage.removeItem('userid');
-      window.dispatchEvent(new Event('auth-change'));
-    },
+import { jwtDecode } from 'jwt-decode';
+import { TokenData } from './UserContext';
 
-    setUser: (username: string, userid: string): void => {
-        localStorage.setItem('username', username);
-        localStorage.setItem('userid', userid);
-        window.dispatchEvent(new Event('auth-change'));
-    },
-  };
+
+class Auth {
+  setToken(token: string) {
+    localStorage.setItem('token', token);
+    window.dispatchEvent(new Event('auth-change'));
+  }
+
+  removeToken() {
+    localStorage.removeItem('token');
+    window.dispatchEvent(new Event('auth-change'));
+  }
+
+  getToken() {
+    return localStorage.getItem('token');
+  }
+
+  isAuthenticated() {
+    const token = this.getToken();
+    if (!token) return false;
+
+    try {
+      const decoded = jwtDecode<TokenData>(token);
+      // Convert to seconds to match JWT exp format
+      const currentTime = Date.now() / 1000;
+      return decoded.exp > currentTime;
+    } catch (error) {
+      return false;
+    }
+  }
+}
+
+
+export const auth = new Auth();

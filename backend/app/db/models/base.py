@@ -16,6 +16,8 @@ class BaseSQLModel(Base):
     DateCreated = Column(DateTime, nullable=False)
     DateChanged = Column(DateTime, nullable=False)
     Active = Column(Boolean, nullable=False)
+    UserCreated = Column(UUID(), nullable=True, index=True)
+    UserChanged = Column(UUID(), nullable=True, index=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,6 +25,8 @@ class BaseSQLModel(Base):
         setattr(self, 'DateCreated', current_datetime())
         setattr(self, 'DateChanged', current_datetime())
         setattr(self, 'Active', True)
+        setattr(self, 'UserCreated', None)
+        setattr(self, 'UserChanged', None)
 
 
 

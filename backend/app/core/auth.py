@@ -33,23 +33,23 @@ class Authenticate:
     def refresh_access_token(cls, token: Annotated[str, Depends(oauth2_scheme)]) -> str:
         try:
             payload = jwt.decode(token, cls.SECRET_KEY, algorithms=[cls.ALGORITHM])
-            username = payload.get("sub")
-            if username is None:
+            user = payload.get("sub")
+            if user is None:
                 raise_401_exception()
         except PyJWTError:
             raise_401_exception()
-        return cls.create_access_token(data={"sub": username})
+        return cls.create_access_token(data={"sub": user})
 
     @classmethod
     def get_current_user(cls, token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
         try:
             payload = jwt.decode(token, cls.SECRET_KEY, algorithms=[cls.ALGORITHM])
-            username = payload.get("sub")
-            if username is None:
+            cur_user = payload.get("sub")
+            if cur_user is None:
                 raise_401_exception()
         except PyJWTError:
             raise_401_exception()
-        user = db.query(UserModel).filter(UserModel.username == username).first()
+        user = db.query(UserModel).filter(UserModel.Id == cur_user["Id"]).first()
         if user is None:
             raise_401_exception()
         return user

@@ -8,11 +8,14 @@ import 'primeicons/primeicons.css';
 import { auth } from '../../utils/auth';
 import { Button } from 'primereact/button';
 import './header.css';
+import { useUser } from '../../utils/UserContext';
 
 const Header: React.FC = () => {
     const navigate = useNavigate(); // React Router navigation hook
+    const { user } = useUser();
 
     const deleteAccessToken = () => {
+        console.log(user);
         auth.removeToken()
     };
 
@@ -23,8 +26,8 @@ const Header: React.FC = () => {
     const end = (
         /* display user from localstorage */
         <div className="user-info">
-            <div>
-                <span>Vpisan: {localStorage.getItem('username')}</span>
+             <div>
+                <span>Vpisan: {user?.username || 'Guest'}</span>
             </div>
 
             <Button 

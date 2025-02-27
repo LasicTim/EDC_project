@@ -11,23 +11,26 @@ import Login from './components/login/login';
 import Layout from './components/layout/layout';
 import Companies from './components/companies/companies';
 import Home from './components/home';
+import { UserProvider } from './utils/UserContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
     <React.StrictMode>
-      <BrowserRouter> 
-        <AuthWrapper>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route element={<Layout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/companies" element={<Companies />} />
-            </Route>
-          </Routes>
-        </AuthWrapper>
+      <BrowserRouter>
+        <UserProvider> 
+          <AuthWrapper>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route element={<Layout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/companies" element={<Companies />} />
+              </Route>
+            </Routes>
+          </AuthWrapper>
+        </UserProvider>
       </BrowserRouter>
     </React.StrictMode>
 );
