@@ -1,4 +1,4 @@
-.p-menubar {
+.custom-header .p-menubar {
     display: flex;
     justify-content: space-between;
     padding: 0.5rem 1rem;
@@ -8,7 +8,7 @@
 
 
 
-.p-menubar::before {
+.custom-header .p-menubar::before {
     content: '';
     position: absolute;
     top: 0;
@@ -19,13 +19,13 @@
     transition: width 0.6s ease;
     z-index: 0;
 }
-.p-menubar:has(.logout-button:hover)::before {
+.custom-header .p-menubar:has(.logout-button:hover)::before {
     width: 100%;
 }
 
 
 /* Keep existing button styles */
-.p-button.p-button-text {
+.custom-header .p-button.p-button-text {
     position: relative;
     z-index: 1;
     color: var(--primary-color);
@@ -38,7 +38,7 @@
 }
 
 
-.p-button.p-button-text:hover {
+.custom-header .p-button.p-button-text:hover {
     color: black;
     position: relative;
     z-index: 1;
@@ -51,7 +51,7 @@
 }
 
 
-.user-info {
+.custom-header .user-info {
     display: flex;
     align-items: center;
     justify-content: space-between;

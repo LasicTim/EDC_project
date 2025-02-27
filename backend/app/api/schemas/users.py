@@ -17,7 +17,6 @@ class UserBase(BaseSchema):
     address: Optional[str] = None
     city: Optional[str] = None
     country: Optional[str] = None
-    password: str
     IdCompany: Optional[str] = None
 
 
@@ -52,3 +51,6 @@ class GeUserWithCompanyData(BaseModel):
     email: str
     companyName: str
     companyEmail: str
+
+class RequestUser(BaseModel):
+    Id: str

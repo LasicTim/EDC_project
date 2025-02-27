@@ -1,0 +1,58 @@
+
+.userview {
+    height: 100%;
+}
+
+.userview .p-card {
+    height: 100%;
+}
+
+.userview .inputs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px; /* Space between items */
+}
+
+.userview .input {
+    margin-top: 10px;
+    flex: 1 1 calc(20% - 10px); /* 5 items per row */
+    max-width: calc(20% - 10px);
+}
+
+/* Ensure InputText takes the full width of its container */
+.userview .p-inputtext {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box; /* Prevents padding from affecting width */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1150px) {
+    .userview .input {
+        flex: 1 1 calc(33.33% - 10px); /* 2 items per row */
+        margin-bottom: 20px;
+        max-width: calc(33.33% - 10px);
+    }
+}
+@media (max-width: 900px) {
+    .userview .input {
+        flex: 1 1 calc(50% - 10px); /* 2 items per row */
+        margin-bottom: 20px;
+        max-width: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 660px) {
+    .userview .input {
+        flex: 1 1 100%; /* 1 items per row */
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .userview .input {
+        flex: 1 1 100%; /* 1 item per row */
+        max-width: 100%;
+    }
+}

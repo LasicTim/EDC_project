@@ -14,12 +14,11 @@ from app.db.models.models import UserModel
 from app.exceptions import raise_exception
 
 router = APIRouter(
-    prefix="/auth",
     tags=["auth"]
 )
 
 
-@router.post("/login", response_model=schemas.Token)
+@router.post("/token", response_model=schemas.Token)
 def login_for_token(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
     user = db.query(UserModel).filter(UserModel.username == form_data.username).first()
     if not user or not verify_password(form_data.password, user.hashed_password):

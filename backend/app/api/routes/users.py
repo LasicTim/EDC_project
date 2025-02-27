@@ -1,10 +1,13 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import Select, and_, update
 from sqlalchemy.orm import Session, joinedload
 
 from app.api.schemas import schemas, companies, users
 from app.core.auth import Authenticate
-from app.core.hashing import hash_password
+from app.core.hashing import hash_password, verify_password
 from app.db.base import get_db
 from app.db.models.models import UserModel, CompanyModel
 from app.exceptions import raise_exception
@@ -88,3 +91,17 @@ def update_user(user: users.GetUser,
     # Fetch and return the updated user
     updated_user = db.execute(query).scalar_one()
     return updated_user
+
+
+
+@router.post("/get_user_data", response_model=list[users.UserBase])
+def get_user_data(user: users.RequestUser,
+                db: Session = Depends(get_db),
+                current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
+    query = Select(*UserModel.__table__.columns).where(
+        and_(UserModel.Id == user.Id, UserModel.Active == True)
+    )
+    user_found = SqlExe(db, query)
+    if not user_found:
+        raise_exception(status_code=404, detail="User not found")
+    return user_found

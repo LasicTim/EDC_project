@@ -10,7 +10,7 @@ const Menu: React.FC = () => {
         {
             label: 'Osebni potatki',
             icon: 'pi pi-fw pi-user',
-            command: () => navigate('/'),
+            command: () => navigate('/user'),
         },
         {
             label: 'Evidenca delovnega časa',

@@ -40,7 +40,7 @@ const Header: React.FC = () => {
     );
 
     return (
-        <header>
+        <header className='custom-header'>
             <Menubar model={items} end={end} />
         </header>
     );

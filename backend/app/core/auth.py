@@ -43,11 +43,11 @@ class Authenticate:
     @classmethod
     def get_current_user(cls, token: Annotated[str, Depends(oauth2_scheme)], db: Session = Depends(get_db)):
         try:
-            payload = jwt.decode(token, cls.SECRET_KEY, algorithms=[cls.ALGORITHM])
+            payload = jwt.decode(token, cls.SECRET_KEY, algorithms=[cls.ALGORITHM], options={"verify_signature": False})
             cur_user = payload.get("sub")
             if cur_user is None:
                 raise_401_exception()
-        except PyJWTError:
+        except PyJWTError as e:
             raise_401_exception()
         user = db.query(UserModel).filter(UserModel.Id == cur_user["Id"]).first()
         if user is None:
