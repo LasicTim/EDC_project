@@ -30,7 +30,7 @@ const Menu: React.FC = () => {
         {
             label: 'Podjetje',
             icon: 'pi pi-fw pi-building',
-            command: () => navigate('/companies'),
+            command: () => navigate('/company'),
         },
         // Add more menu items as needed
     ];
