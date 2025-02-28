@@ -13,7 +13,7 @@ from app.db.models.models import UserModel, CompanyModel
 from app.exceptions import raise_exception
 from app.utils.sql_utils import SqlInsert, SqlExe, SqlExeAndCommit, SqlExeWithMapping
 from app.utils.email import is_valid_email, is_valid_password
-from app.utils.time import current_datetime
+from app.utils.time import current_datetime, convert_to_utc_datetime, convert_utc_to_local
 
 router = APIRouter(
     prefix="/users",
@@ -30,7 +30,7 @@ def create_user(user: users.GetUser, db: Session = Depends(get_db)) -> UserModel
     if existing_user or not is_valid_email(user.email) or not is_valid_password(user.password):  # This means at least one user was found
         raise_exception(status_code=400, detail="User already exists")
 
-    user_model = UserModel(username=user.username, email=user.email, hashed_password=hash_password(user.password))
+    user_model = UserModel(username=user.username, email=user.email, hashed_password=hash_password(user.password), is_superuser=True)
     user_created = SqlInsert(db, user_model)
     return user_created
 
@@ -65,23 +65,34 @@ def get_user_with_company(user: users.UserCreate,
         raise_exception(status_code=404, detail="User not found")
     return user_found
 
-@router.post("/update_user", response_model=users.UserCreate)
-def update_user(user: users.GetUser,
+@router.post("/update_user", response_model=users.UserBase)
+def update_user(user: users.UserBase,
                 db: Session = Depends(get_db),
                 current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
     # Retrieve the existing user using the session's execute method
-    query = Select(UserModel).where(and_(UserModel.username == user.username, UserModel.Active == True))
+    query = Select(UserModel).where(and_(UserModel.Id == user.Id, UserModel.Active == True))
     existing_user = db.execute(query).scalar_one_or_none()
     if not existing_user or not is_valid_email(user.email):
         raise_exception(status_code=404, detail="User not found")
 
+    if user.birth_date:
+        user.birth_date = convert_utc_to_local(user.birth_date,2)
     # Prepare the update statement
     update_stmt = (
         update(UserModel)
         .where(UserModel.Id == existing_user.Id)
         .values(
+            username=user.username,
             email=user.email,
             DateChanged=current_datetime(),
+            first_name =user.first_name,
+            last_name=user.last_name,
+            birth_date=user.birth_date,
+            phone_number=user.phone_number,
+            address=user.address,
+            city=user.city,
+            country=user.country,
+            IdCompany=user.IdCompany
         )
         .execution_options(synchronize_session="fetch")
     )

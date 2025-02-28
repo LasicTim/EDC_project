@@ -13,7 +13,7 @@ class UserModel(BaseSQLModel):
     is_superuser = Column(Boolean, default=False)
     first_name = Column(String(100))
     last_name = Column(String(100))
-    birth_date = Column(DateTime, default=current_date())
+    birth_date = Column(DateTime)
     phone_number = Column(String(20))
     address = Column(String(100))
     city = Column(String(50))

@@ -79,7 +79,7 @@ const SignUp: React.FC = () => {
 
     return (
         <div
-            className="login-page"
+            className="sign-up-page"
         >
             <Card title="Vpis" footer={footer}>
                 

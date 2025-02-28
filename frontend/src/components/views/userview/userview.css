@@ -7,10 +7,18 @@
     height: 100%;
 }
 
+.userview .p-card .p-card-title {
+    font-size: 2rem;
+    color: #495057;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+
 .userview .inputs {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 10px; /* Space between items */
 }
 
@@ -25,6 +33,12 @@
     width: 100%;
     padding: 8px;
     box-sizing: border-box; /* Prevents padding from affecting width */
+}
+
+.userview .FormSaveButton {
+    display: flex;
+    justify-content: flex-end; /* Aligns the button to the right */
+    margin-top: 20px; /* Optional: add some space above the button */
 }
 
 /* Responsive adjustments */

@@ -54,3 +54,4 @@ class GeUserWithCompanyData(BaseModel):
 
 class RequestUser(BaseModel):
     Id: str
+
