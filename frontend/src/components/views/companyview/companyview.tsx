@@ -48,7 +48,8 @@ const CompanyView: React.FC = () => {
                 onSelect={handleUserSelect}
                 data={userData}
                 columns={userColumns}
-                label="Users"/>
+                label="Users"
+                maxWidth='100px'/>
             <MultiSelectDataTablePicker
                 onSelect={handleUsersSelect}
                 data={userData}

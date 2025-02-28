@@ -5,6 +5,9 @@ import { DataTable, DataTableSelectEvent  } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 
+import "./picker.css"
+import { FloatLabel } from "primereact/floatlabel";
+
 
 // Define the type for the dynamic column configuration
 interface ColumnConfig {
@@ -17,6 +20,7 @@ interface DatatablePickerProps<T> {
     data: T[];  // Dynamic data
     columns: ColumnConfig[];  // Dynamic columns
     label: string;  // Label for the picker input
+    maxWidth?: string;
 }
 
 const DatatablePicker = <T extends Record<string, any>>({
@@ -24,6 +28,7 @@ const DatatablePicker = <T extends Record<string, any>>({
     data,
     columns,
     label,
+    maxWidth = "400px",
 }: DatatablePickerProps<T>) => {  
     const [visible, setVisible] = useState<boolean>(false);
     const [selectedItem, setSelectedItem] = useState<T | null>(null);
@@ -42,16 +47,19 @@ const DatatablePicker = <T extends Record<string, any>>({
     return (
         <div>
             {/* Picker Input */}
-            <div className="p-field">
-                <label htmlFor="data-picker">{label}</label>
-                <div className="p-inputgroup">
-                    <InputText
-                        id="data-picker"
-                        value={selectedItem ? String(selectedItem[columns[0].field]) : ""}
-                        readOnly
-                    />
-                    <Button icon="pi pi-search" onClick={() => setVisible(true)} />
-                </div>
+            <div className="picker-input">
+                <FloatLabel>
+                    <label htmlFor="data-picker">{label}</label>
+                    <div className="p-inputgroup">
+                        <InputText
+                            style={{"maxWidth": maxWidth}}
+                            id="data-picker"
+                            value={selectedItem ? String(selectedItem[columns[0].field]) : ""}
+                            readOnly
+                        />
+                        <Button icon="pi pi-search" onClick={() => setVisible(true)} />
+                    </div>
+                </FloatLabel>
             </div>
 
             {/* DataTable inside Dialog */}
