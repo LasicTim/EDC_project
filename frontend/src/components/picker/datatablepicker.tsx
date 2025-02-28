@@ -5,34 +5,36 @@ import { DataTable, DataTableSelectEvent  } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 
-// Define the type for the data items
-interface User {
-    id: number;
-    name: string;
-    email: string;
+
+// Define the type for the dynamic column configuration
+interface ColumnConfig {
+    field: string;
+    header: string;
 }
 
-interface DatatablePickerProps {
-    onUserSelect: (user: User) => void; 
+interface DatatablePickerProps<T> {
+    onSelect: (selectedData: T | null) => void;  // Callback function to return selected data
+    data: T[];  // Dynamic data
+    columns: ColumnConfig[];  // Dynamic columns
+    label: string;  // Label for the picker input
 }
 
-const DataTablePicker: React.FC<DatatablePickerProps> = ({onUserSelect}) => {
+const DatatablePicker = <T extends Record<string, any>>({
+    onSelect,
+    data,
+    columns,
+    label,
+}: DatatablePickerProps<T>) => {  
     const [visible, setVisible] = useState<boolean>(false);
-    const [selectedItem, setSelectedItem] = useState<User | null>(null);
-    const [selectedRow, setSelectedRow] = useState<User | null>(null);
+    const [selectedItem, setSelectedItem] = useState<T | null>(null);
+    const [selectedRow, setSelectedRow] = useState<T | null>(null);
 
-    // Sample Data
-    const data: User[] = [
-        { id: 1, name: "John Doe", email: "john@example.com" },
-        { id: 2, name: "Jane Smith", email: "jane@example.com" },
-        { id: 3, name: "Mike Johnson", email: "mike@example.com" }
-    ];
 
     // Function to handle row selection
     const handleRowSelect = () => {
         if (selectedRow) {
-            setSelectedItem(selectedRow);
-            onUserSelect(selectedRow);
+            setSelectedItem(selectedRow); // Update the selected items
+            onSelect(selectedRow); // Pass selected users back to parent
             setVisible(false); // Close Dialog
         }
     };
@@ -41,24 +43,31 @@ const DataTablePicker: React.FC<DatatablePickerProps> = ({onUserSelect}) => {
         <div>
             {/* Picker Input */}
             <div className="p-field">
-                <label htmlFor="user-picker">Pick a User</label>
+                <label htmlFor="data-picker">{label}</label>
                 <div className="p-inputgroup">
-                    <InputText id="user-picker" value={selectedItem ? selectedItem.name : ""} readOnly />
+                    <InputText
+                        id="data-picker"
+                        value={selectedItem ? String(selectedItem[columns[0].field]) : ""}
+                        readOnly
+                    />
                     <Button icon="pi pi-search" onClick={() => setVisible(true)} />
                 </div>
             </div>
 
             {/* DataTable inside Dialog */}
-            <Dialog header="Select a User" visible={visible} style={{ width: "50vw" }} onHide={() => setVisible(false)}>
+            <Dialog header="Select an Item" visible={visible} style={{ width: "50vw" }} onHide={() => setVisible(false)}>
                 <DataTable
                     value={data}
                     selectionMode="single"
                     selection={selectedRow}
-                    onRowSelect={(e: DataTableSelectEvent ) => setSelectedRow(e.data as User)}
-                    dataKey="id"
+                    onRowSelect={(e: DataTableSelectEvent) => setSelectedRow(e.data as T)}
+                    dataKey={columns[0].field} // Use the first column's field as the unique identifier
                 >
-                    <Column field="name" header="Name" />
-                    <Column field="email" header="Email" />
+                    <Column selectionMode="single" headerStyle={{ width: '3rem' }} />
+                    {/* Dynamically render columns based on the `columns` prop */}
+                    {columns.map((col) => (
+                        <Column key={col.field} field={col.field} header={col.header} />
+                    ))}
                 </DataTable>
 
                 {/* Action Buttons */}
@@ -71,4 +80,4 @@ const DataTablePicker: React.FC<DatatablePickerProps> = ({onUserSelect}) => {
     );
 };
 
-export default DataTablePicker;
+export default DatatablePicker;

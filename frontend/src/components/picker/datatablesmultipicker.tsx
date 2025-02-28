@@ -5,33 +5,31 @@ import { DataTable, DataTableSelectEvent, DataTableSelectionMultipleChangeEvent 
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 
-// Define the type for the data items
-interface User {
-    id: number;
-    name: string;
-    email: string;
+
+// Define the type for the dynamic column configuration
+interface ColumnConfig {
+    field: string;
+    header: string;
 }
 
-interface DatatablePickerProps {
-    onUserSelect: (users: User[]) => void; // Callback function to return selected users
+interface DatatablePickerProps<T> {
+    onSelect: (selectedData: T[]) => void;  // Callback function to return selected data
+    data: T[];  // Dynamic data
+    columns: ColumnConfig[];  // Dynamic columns
+    label: string;  // Label for the picker input
 }
 
-const MultiSelectDataTablePicker: React.FC<DatatablePickerProps> = ({ onUserSelect }) => {
+
+
+const MultiSelectDataTablePicker = <T extends {}>({ onSelect, data, columns, label }: DatatablePickerProps<T>) => {
     const [visible, setVisible] = useState<boolean>(false);
-    const [selectedItems, setSelectedItems] = useState<User[]>([]); // Ensure it's initialized as an empty array
-    const [selectedRows, setSelectedRows] = useState<User[]>([]);
-
-    // Sample Data
-    const data: User[] = [
-        { id: 1, name: "John Doe", email: "john@example.com" },
-        { id: 2, name: "Jane Smith", email: "jane@example.com" },
-        { id: 3, name: "Mike Johnson", email: "mike@example.com" }
-    ];
+    const [selectedItems, setSelectedItems] = useState<T[]>([]); // Ensure it's initialized as an empty array
+    const [selectedRows, setSelectedRows] = useState<T[]>([]);
 
     // Function to handle selection
     const handleRowSelect = () => {
         setSelectedItems(selectedRows); // Update the selected items
-        onUserSelect(selectedRows); // Pass selected users back to parent
+        onSelect(selectedRows); // Pass selected users back to parent
         setVisible(false); // Close Dialog
     };
 
@@ -39,11 +37,11 @@ const MultiSelectDataTablePicker: React.FC<DatatablePickerProps> = ({ onUserSele
         <div>
             {/* Picker Input */}
             <div className="p-field">
-                <label htmlFor="user-picker">Pick Users</label>
+                <label htmlFor="data-picker">{label}</label>
                 <div className="p-inputgroup">
                     <InputText
-                        id="user-picker"
-                        value={selectedItems?.length > 0 ? selectedItems.map((user) => user.name).join(", ") : ""}
+                        id="data-picker"
+                        value={selectedItems.length > 0 ? selectedItems.map((item) => (item as any).name).join(", ") : ""}
                         readOnly
                     />
                     <Button icon="pi pi-search" onClick={() => setVisible(true)} />
@@ -51,17 +49,18 @@ const MultiSelectDataTablePicker: React.FC<DatatablePickerProps> = ({ onUserSele
             </div>
 
             {/* DataTable inside Dialog */}
-            <Dialog header="Select Users" visible={visible} style={{ width: "50vw" }} onHide={() => setVisible(false)}>
+            <Dialog header={`Select ${label}`} visible={visible} style={{ width: "50vw" }} onHide={() => setVisible(false)}>
                 <DataTable
                     value={data}
                     selectionMode="multiple" // Enable multiple selection
                     selection={selectedRows}
-                    onSelectionChange={(e: DataTableSelectionMultipleChangeEvent<User[]>) => setSelectedRows(e.value as User[])}
+                    onSelectionChange={(e: DataTableSelectionMultipleChangeEvent<T[]>) => setSelectedRows(e.value)}
                     dataKey="id"
                 >
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
-                    <Column field="name" header="Name" />
-                    <Column field="email" header="Email" />
+                    {columns.map((col, index) => (
+                        <Column key={index} field={col.field} header={col.header} />
+                    ))}
                 </DataTable>
 
                 {/* Action Buttons */}
