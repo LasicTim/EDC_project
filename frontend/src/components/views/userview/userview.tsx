@@ -40,11 +40,13 @@ const UserView: React.FC = () => {
     const [userdata, setUserData]  = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const { user } = useUser();
+    const { user, setUser } = useUser();
+
+    //refs
     const toast = useRef<Toast>(null);
     const toastLoadFormShown = useRef<Boolean>(false);  // Flag to track if toast has been shown
-
-    const updateErrorToast =useRef<Toast>(null)
+    const updateErrorToast = useRef<Toast>(null);
+    const userFetchedRef = useRef<Boolean>(false);
 
     const validateForm = (): boolean => {
         if (!userdata?.username) {
@@ -61,8 +63,11 @@ const UserView: React.FC = () => {
 
     useEffect(() => {
         // If the user is not available in the context, we just return
-        if (!user || !user.Id) {
+        if (!user || !user.Id ) {
             setLoading(true);
+            return;
+        }
+        if (userFetchedRef.current){
             return;
         }
 
@@ -82,18 +87,15 @@ const UserView: React.FC = () => {
                 if (response.status === 200) {
                     setUserData(response.data[0]);
                     showToast(toastLoadFormShown, toast);
-                    if(userdata?.username) {
-                        user.username = userdata.username;
-                    }
                     
                 }
-                console.log("get_user_data", userdata)
             } catch (err) {
                 if (axios.isAxiosError(err) && err.response) {
                     setError(err.response.data.detail);
                 }
             } finally {
                 setLoading(false);
+                
             }
         };
 
@@ -117,6 +119,9 @@ const UserView: React.FC = () => {
                 showToastWithOutLoadRef(updateErrorToast, 'success',"Posodobitev", "Uporabnik posodobljen");
                 console.log('Updated user successful',response.data );
                 setUserData(response.data);
+                userFetchedRef.current = true;
+                
+                
             }
             
         } catch (error) {
@@ -128,7 +133,14 @@ const UserView: React.FC = () => {
             }
             // Handle error (show error message to user)
         } finally {
+            if (userdata && user) {
+                setUser({
+                    username: userdata.username,
+                    Id: user.Id
+                });
+            }
             setLoading(false)
+            
         }
     };
 
