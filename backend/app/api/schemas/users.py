@@ -55,3 +55,9 @@ class GeUserWithCompanyData(BaseModel):
 class RequestUser(BaseModel):
     Id: str
 
+class ResponseCompanyUser(BaseModel):
+    Id: str
+    username: str
+    email: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None

@@ -14,6 +14,7 @@ import Home from './components/home';
 import { UserProvider } from './utils/UserContext';
 import CompanyView from './components/views/companyview/companyview';
 import UserView from './components/views/userview/userview';
+import UserBrowseView from './components/views/companyworkersview/companyworkersview';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -31,6 +32,7 @@ root.render(
                 <Route path="/companies" element={<Companies />} />
                 <Route path="/company" element={<CompanyView />} />
                 <Route path="/user" element={<UserView />} />
+                <Route path="/workers" element={<UserBrowseView />} />
               </Route>
             </Routes>
           </AuthWrapper>

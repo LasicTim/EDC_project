@@ -15,7 +15,7 @@ import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { showToast, showToastWithOutLoadRef } from '../../../utils/toast';
 
-interface User {
+export interface User {
     Id: string;
     username: string;
     email: string;

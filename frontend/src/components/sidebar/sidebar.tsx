@@ -32,6 +32,11 @@ const Menu: React.FC = () => {
             icon: 'pi pi-fw pi-building',
             command: () => navigate('/company'),
         },
+        {
+            label: 'Delavci',
+            icon: 'pi pi-fw pi-users',
+            command: () => navigate('/workers'),
+        },
         // Add more menu items as needed
     ];
 

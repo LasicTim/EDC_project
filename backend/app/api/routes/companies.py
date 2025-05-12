@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import Select, and_, join, update
 from sqlalchemy.orm import Session, outerjoin
 
-from app.api.schemas import schemas, companies
+from app.api.schemas import schemas, companies, users
 from app.core.auth import Authenticate
 from app.core.hashing import hash_password
 from app.db.base import get_db
@@ -74,6 +74,44 @@ def get_company(company: companies.GetCompany,
     if not company_found:
         raise_exception(status_code=404, detail="company not found")
     return company_found
+
+@router.post("/get_company_workers", response_model=list[users.ResponseCompanyUser])
+def get_company(company: companies.GetCompany,
+             db: Session = Depends(get_db),
+             current_user: UserModel = Depends(Authenticate.get_current_user)) -> CompanyModel:
+
+
+    query = (Select(
+        *CompanyModel.__table__.columns
+    ).select_from(
+        outerjoin(UserModel, CompanyModel, UserModel.IdCompany == CompanyModel.Id)
+    )
+    .where(and_(
+        UserModel.Id == company.IdUser,
+        CompanyModel.Active == True
+        ))
+    )
+
+    company_found = SqlExe(db, query)
+    if not company_found:
+        raise_exception(status_code=404, detail="company not found")
+    company_id = company_found[0]["Id"]
+    query = (Select(
+        UserModel.Id,
+        UserModel.username,
+        UserModel.email,
+        UserModel.first_name,
+        UserModel.last_name
+    ).where(and_(
+        UserModel.IdCompany == company_id,
+        UserModel.Active == True
+        ))
+    )
+    users_found = SqlExe(db, query)
+    if not users_found:
+        raise_exception(status_code=404, detail="users not found")
+
+    return users_found
 
 
 @router.post("/update_company", response_model=companies.GetCompanyBase)
