@@ -117,3 +117,31 @@ def get_user_data(user: users.RequestUser,
     if not user_found:
         raise_exception(status_code=404, detail="User not found")
     return user_found
+
+
+@router.post("/delete_user", response_model=users.UserBase)
+def delete_user(user: users.RequestUser,
+                db: Session = Depends(get_db),
+                current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
+    # Retrieve the existing user using the session's execute method
+    query = Select(UserModel).where(and_(UserModel.Id == user.Id, UserModel.Active == True))
+    existing_user = db.execute(query).scalar_one_or_none()
+    if not existing_user or not is_valid_email(user.email):
+        raise_exception(status_code=404, detail="User not found")
+
+
+    # Prepare the update statement
+    update_stmt = (
+        update(UserModel)
+        .where(UserModel.Id == existing_user.Id)
+        .values(
+            Active=False,
+        )
+        .execution_options(synchronize_session="fetch")
+    )
+    # Execute the update and commit the transaction
+    SqlExeAndCommit(db,update_stmt)
+
+    # Fetch and return the updated user
+    updated_user = db.execute(query).scalar_one()
+    return updated_user

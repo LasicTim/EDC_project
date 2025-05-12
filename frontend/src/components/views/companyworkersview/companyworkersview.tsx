@@ -80,18 +80,38 @@ const UserBrowseView: React.FC = () => {
         }
     };
 
-    const handleEdit = (user: User) => {
-        console.log('Edit user:', user);
+    const handleEdit = (user_selected: User) => {
+        console.log('Edit user:', user_selected);
         // navigate(`/edit-user/${user.Id}`) or open a dialog
     };
 
-    const handleDelete = async (user: User) => {
+    const handleDelete = async (user_selected: User) => {
         try {
-            await api.delete(`/users/${user.Id}`);
-            showToastWithOutLoadRef(toast, 'success', "Uspeh", "Uporabnik izbrisan");
-            fetchCompanyUsers();
-        } catch (error) {
+
+            const user_data = {
+                IdUser: user_selected.Id,
+            };
+
+                
+            const response = await api.post('/users/delete_user', user_data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.status === 200) {
+        
+                showToastWithOutLoadRef(toast, 'success', "Uspeh", "Uporabnik izbrisan");
+                fetchCompanyUsers();
+                
+            }
+        } catch (err) {
+            if (axios.isAxiosError(err) && err.response) {
+                setError(err.response.data.detail);
+            }
             showToastWithOutLoadRef(toast, 'error', "Napaka", "Uporabnika ni bilo mogoče izbrisati");
+        } finally {
+            setLoading(false);
+            
         }
     };
 
