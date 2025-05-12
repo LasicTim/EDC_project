@@ -30,8 +30,6 @@ interface User {
     IdCompany?: string | null;
     DateCreated: Date;
     DateChanged: Date;
-    UserChanged: string;
-    UserCreated: string;
 }
 
 
@@ -108,6 +106,8 @@ const UserView: React.FC = () => {
         try {
 
             setLoading(true);
+
+            console.log('userdata:', userdata);
 
             const response = await api.post('/users/update_user', userdata, {
                 headers: {

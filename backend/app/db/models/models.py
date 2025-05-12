@@ -31,6 +31,7 @@ class CompanyModel(BaseSQLModel):
     address = Column(String(100))
     city = Column(String(50))
     country = Column(String(50))
+    postal_code = Column(String(100))
 
     # Relationships
     users = relationship("UserModel", back_populates="company")

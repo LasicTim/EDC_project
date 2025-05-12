@@ -3,6 +3,7 @@ from typing import Optional, Annotated
 
 import jwt
 from fastapi import Depends
+from fastapi.openapi.models import Response
 from fastapi.security import OAuth2PasswordBearer
 from jwt import PyJWTError, InvalidTokenError
 from sqlalchemy.orm import Session
@@ -32,7 +33,7 @@ class Authenticate:
     @classmethod
     def refresh_access_token(cls, token: Annotated[str, Depends(oauth2_scheme)]) -> str:
         try:
-            payload = jwt.decode(token, cls.SECRET_KEY, algorithms=[cls.ALGORITHM])
+            payload = jwt.decode(token, cls.SECRET_KEY, algorithms=[cls.ALGORITHM], options={"verify_signature": False})
             user = payload.get("sub")
             if user is None:
                 raise_401_exception()

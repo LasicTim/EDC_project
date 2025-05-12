@@ -9,8 +9,11 @@ export const showToast = ((
         severity: ToastSeverity = 'success', // Default value: success
         summary: string = 'Success', // Default value: 'Success'
         detail: string = 'Uspešno naloženo' // Default value: 'Operation successful'
-       
+
       ) => {
+        console.log('showToast called');
+        console.log('toasLoadtRef:', toasLoadtRef);
+
         if (!toasLoadtRef.current) {
             toasLoadtRef.current = true;
             toastref.current?.show({
