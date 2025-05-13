@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey
+from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Text, Integer
 from sqlalchemy.orm import relationship
 
 from app.db.models.base import BaseSQLModel
@@ -35,4 +35,41 @@ class CompanyModel(BaseSQLModel):
 
     # Relationships
     users = relationship("UserModel", back_populates="company")
-    
+
+class AbsenceModel(BaseSQLModel):
+    __tablename__ = 'absences'
+    DateFrom = Column(DateTime)
+    DateTo = Column(DateTime)
+    Reason = Column(String(100))
+    Comment = Column(Text)
+    IdWorker = Column(String(36), ForeignKey('users.Id'), nullable=True, index=True)
+
+    # Relationships
+    user = relationship("UserModel", viewonly=True)
+
+class VacationModel(BaseSQLModel):
+    __tablename__ = 'vacations'
+    DateFrom = Column(DateTime)
+    DateTo = Column(DateTime)
+    Comment = Column(Text)
+    OldVacation = Column(Integer)
+    CurVacation = Column(Integer)
+    Criteria = Column(Text) # json of criteria  name and value in days
+    IdWorker = Column(String(36), ForeignKey('users.Id'), nullable=True, index=True)
+
+    # Relationships
+    user = relationship("UserModel", viewonly=True)
+
+class WorkTimeModel(BaseSQLModel):
+    __tablename__ = 'worktime'
+    WorkType = Column(String(20)) # DELO,DELO OD DOMA ,TEREN
+    BrakeTimeFrom = Column(DateTime)
+    BrakeTimeTo = Column(DateTime)
+    HasBreakTime = Column(Boolean)
+    Comment = Column(Text)
+    WorkDate = Column(DateTime)
+    PlaceOfWork = Column(String(100))
+    IdWorker = Column(String(36), ForeignKey('users.Id'), nullable=True, index=True)
+
+    # Relationships
+    user = relationship("UserModel", viewonly=True)
