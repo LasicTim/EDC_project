@@ -8,6 +8,7 @@ import { api } from '../../../api';
 import { useUser } from '../../../utils/UserContext';
 import axios from 'axios';
 import { showToast, showToastWithOutLoadRef } from '../../../utils/toast';
+import { useNavigate } from 'react-router-dom';
 
 
 interface User {
@@ -33,6 +34,8 @@ const UserBrowseView: React.FC = () => {
     const toast = useRef<Toast>(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     const userFetchedRef = useRef<Boolean>(false);
     const toastLoadFormShown = useRef<Boolean>(false);  // Flag to track if toast has been shown
@@ -81,7 +84,7 @@ const UserBrowseView: React.FC = () => {
     };
 
     const handleEdit = (user_selected: User) => {
-        console.log('Edit user:', user_selected);
+        navigate(`/workers/edit/${user_selected.Id}`);
         // navigate(`/edit-user/${user.Id}`) or open a dialog
     };
 
@@ -89,7 +92,7 @@ const UserBrowseView: React.FC = () => {
         try {
 
             const user_data = {
-                IdUser: user_selected.Id,
+                Id: user_selected.Id,
             };
 
                 
@@ -150,7 +153,7 @@ const UserBrowseView: React.FC = () => {
                     icon="pi pi-plus"
                     severity="success"
                     className="p-button-raised" 
-                    onClick={() => console.log('Create user')}
+                    onClick={() => navigate('/workers/create')}
                 />
             </div>
 

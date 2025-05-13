@@ -35,6 +35,36 @@ def create_user(user: users.GetUser, db: Session = Depends(get_db)) -> UserModel
     user_created = SqlInsert(db, user_model)
     return user_created
 
+@router.post("/create_worker", response_model=users.UserCreate)
+def create_worker(user: users.WorkerCreate,
+                  db: Session = Depends(get_db),
+                  current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
+    query = Select(
+        UserModel.username,
+        UserModel.hashed_password
+    ).where(and_(UserModel.username == user.username, UserModel.Active == True))
+    existing_user = SqlExe(db, query)
+    if existing_user or not is_valid_email(user.email):  # This means at least one user was found
+        raise_exception(status_code=400, detail="User already exists")
+
+    user_model = UserModel(
+        username=user.username,
+        email=user.email,
+        hashed_password=hash_password(user.password),
+        DateChanged = current_datetime(),
+        DateCreated = current_datetime(),
+        first_name = user.first_name,
+        last_name = user.last_name,
+        birth_date = user.birth_date,
+        phone_number = user.phone_number,
+        address = user.address,
+        city = user.city,
+        country = user.country,
+        IdCompany = current_user.IdCompany
+        )
+    user_created = SqlInsert(db, user_model)
+    return user_created
+
 
 @router.post("/get_user", response_model=list[users.GetUser])
 def get_user(user: users.UserCreate,
@@ -104,6 +134,44 @@ def update_user(user: users.UserBase,
     updated_user = db.execute(query).scalar_one()
     return updated_user
 
+@router.post("/update_worker", response_model=users.UserBase)
+def update_worker(user: users.UserBase,
+                db: Session = Depends(get_db),
+                current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
+    # Retrieve the existing user using the session's execute method
+    query = Select(UserModel).where(and_(UserModel.Id == user.Id, UserModel.Active == True))
+    existing_user = db.execute(query).scalar_one_or_none()
+    if not existing_user or not is_valid_email(user.email):
+        raise_exception(status_code=404, detail="User not found")
+
+    if user.birth_date:
+        user.birth_date = convert_utc_to_local(user.birth_date,2)
+    # Prepare the update statement
+    update_stmt = (
+        update(UserModel)
+        .where(UserModel.Id == existing_user.Id)
+        .values(
+            username=user.username,
+            email=user.email,
+            DateChanged=current_datetime(),
+            first_name =user.first_name,
+            last_name=user.last_name,
+            birth_date=user.birth_date,
+            phone_number=user.phone_number,
+            address=user.address,
+            city=user.city,
+            country=user.country,
+            IdCompany=current_user.IdCompany
+        )
+        .execution_options(synchronize_session="fetch")
+    )
+    # Execute the update and commit the transaction
+    SqlExeAndCommit(db,update_stmt)
+
+    # Fetch and return the updated user
+    updated_user = db.execute(query).scalar_one()
+    return updated_user
+
 
 
 @router.post("/get_user_data", response_model=list[users.UserBase])
@@ -126,7 +194,7 @@ def delete_user(user: users.RequestUser,
     # Retrieve the existing user using the session's execute method
     query = Select(UserModel).where(and_(UserModel.Id == user.Id, UserModel.Active == True))
     existing_user = db.execute(query).scalar_one_or_none()
-    if not existing_user or not is_valid_email(user.email):
+    if not existing_user:
         raise_exception(status_code=404, detail="User not found")
 
 
@@ -143,5 +211,6 @@ def delete_user(user: users.RequestUser,
     SqlExeAndCommit(db,update_stmt)
 
     # Fetch and return the updated user
+    query = Select(UserModel).where(and_(UserModel.Id == user.Id))
     updated_user = db.execute(query).scalar_one()
     return updated_user

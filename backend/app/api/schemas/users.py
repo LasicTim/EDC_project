@@ -24,6 +24,20 @@ class UserCreate(BaseModel):
     username: str
     IdCompany: Optional[str] = None
 
+class WorkerCreate(BaseModel):
+    username: str
+    email: str
+    password: Optional[str] = 'geslo123@'
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    birth_date: Optional[datetime] = None
+    phone_number: Optional[str] = None
+    address: Optional[str] = None
+    city: Optional[str] = None
+    country: Optional[str] = None
+    IdCompany: Optional[str] = None
+
+
 
 class UserUpdate(BaseSchema):
     username: Optional[str] = None
