@@ -11,8 +11,6 @@ export const showToast = ((
         detail: string = 'Uspešno naloženo' // Default value: 'Operation successful'
 
       ) => {
-        console.log('showToast called');
-        console.log('toasLoadtRef:', toasLoadtRef);
 
         if (!toasLoadtRef.current) {
             toasLoadtRef.current = true;

@@ -1,6 +1,5 @@
 .picker-input .p-inputgroup {
     display: flex;
     align-items: center;
-    width: 100%; /* Ensure it fills the container or the parent width */
-    padding: 0.25rem; /* Padding inside the container */
+    max-width: 100%;
 }

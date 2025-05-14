@@ -27,6 +27,11 @@
     flex: 1 1 calc(20% - 10px); /* 5 items per row */
     max-width: calc(20% - 10px);
 }
+.userview .input-md {
+    margin-top: 10px;
+    flex: 1 1 calc(50% - 10px); /* 5 items per row */
+    max-width: calc(50% - 10px);
+}
 
 /* Ensure InputText takes the full width of its container */
 .userview .p-inputtext {

@@ -15,7 +15,7 @@ const Menu: React.FC = () => {
         {
             label: 'Evidenca delovnega časa',
             icon: 'pi pi-fw pi-clock',
-            command: () => navigate('/'),
+            command: () => navigate('/worktime'),
         },
         {
             label: 'Predloge',

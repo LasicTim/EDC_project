@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { DataTable, DataTableSelectEvent  } from "primereact/datatable";
@@ -21,6 +21,8 @@ interface DatatablePickerProps<T> {
     columns: ColumnConfig[];  // Dynamic columns
     label: string;  // Label for the picker input
     maxWidth?: string;
+    selectedId?: string;
+    idField?: string;
 }
 
 const DatatablePicker = <T extends Record<string, any>>({
@@ -29,10 +31,25 @@ const DatatablePicker = <T extends Record<string, any>>({
     columns,
     label,
     maxWidth = "400px",
+    selectedId,
+    idField = 'Id',
 }: DatatablePickerProps<T>) => {  
     const [visible, setVisible] = useState<boolean>(false);
     const [selectedItem, setSelectedItem] = useState<T | null>(null);
     const [selectedRow, setSelectedRow] = useState<T | null>(null);
+    const initialSelectionMade = useRef(false);
+
+    useEffect(() => {
+        if (!initialSelectionMade.current && selectedId && data.length > 0) {
+            const found = data.find(item => String(item[idField]) === String(selectedId));
+            if (found) {
+                setSelectedItem(found);
+                setSelectedRow(found);
+                onSelect(found);
+                initialSelectionMade.current = true;
+            }
+        }
+    }, [selectedId, data, idField]);
 
 
     // Function to handle row selection

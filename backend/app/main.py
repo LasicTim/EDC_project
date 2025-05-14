@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api.routes import users, auth, companies  # Import your API routes
+from app.api.routes import users, auth, companies, worktime  # Import your API routes
 from app.db.base import engine, Base
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -13,6 +13,7 @@ app = FastAPI(title="My FastAPI App", version="1.0.0")
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(companies.router)
+app.include_router(worktime.router)
 
 origins = [
     "http://localhost:3000",

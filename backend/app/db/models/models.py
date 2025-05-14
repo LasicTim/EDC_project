@@ -18,6 +18,7 @@ class UserModel(BaseSQLModel):
     address = Column(String(100))
     city = Column(String(50))
     country = Column(String(50))
+    vacation_left = Column(Integer)
     IdCompany = Column(String(36), ForeignKey('companies.Id'), nullable=True, index=True)
 
     # Relationships
@@ -63,12 +64,14 @@ class VacationModel(BaseSQLModel):
 class WorkTimeModel(BaseSQLModel):
     __tablename__ = 'worktime'
     WorkType = Column(String(20)) # DELO,DELO OD DOMA ,TEREN
-    BrakeTimeFrom = Column(DateTime)
-    BrakeTimeTo = Column(DateTime)
+    BreakTimeFrom = Column(DateTime)
+    BreakTimeTo = Column(DateTime)
     HasBreakTime = Column(Boolean)
     Comment = Column(Text)
     WorkDate = Column(DateTime)
     PlaceOfWork = Column(String(100))
+    WorkTimeFrom = Column(DateTime)
+    WorkTimeTo = Column(DateTime)
     IdWorker = Column(String(36), ForeignKey('users.Id'), nullable=True, index=True)
 
     # Relationships

@@ -8,7 +8,7 @@ interface TinyMCEEditorProps {
 }
 
 const TinyMCEEditor: React.FC<TinyMCEEditorProps> = ({
-  initialValue = "<p>Start typing...</p>",
+  initialValue = "",
   onEditorChange,
   height = 400,
 }) => {

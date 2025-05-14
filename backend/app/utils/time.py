@@ -14,13 +14,15 @@ def convert_to_utc_datetime(date: datetime):
 
 
 def convert_utc_to_local(utc_datetime: datetime, offset_hours: int):
-    # Ensure the UTC datetime is timezone-aware
-    if utc_datetime.tzinfo is None:
-        utc_datetime = utc_datetime.replace(tzinfo=datetime.timezone.utc)
+    if utc_datetime is None:
+        return utc_datetime
 
-    # Create the local timezone with the given offset
-    local_timezone = datetime.timezone(datetime.timedelta(hours=offset_hours))
+    # Only convert if tzinfo exists and is UTC
+    if utc_datetime.tzinfo is not None and utc_datetime.tzinfo == datetime.timezone.utc:
+        # Create the local timezone with the given offset
+        local_timezone = datetime.timezone(datetime.timedelta(hours=offset_hours))
+        # Convert to local time
+        return utc_datetime.astimezone(local_timezone)
 
-    # Convert to local time
-    local_time = utc_datetime.astimezone(local_timezone)
-    return local_time
+    # If tzinfo is None or not UTC, return unchanged
+    return utc_datetime

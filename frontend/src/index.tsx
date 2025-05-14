@@ -17,6 +17,9 @@ import UserView from './components/views/userview/userview';
 import UserBrowseView from './components/views/companyworkersview/companyworkersview';
 import UserCreateView from './components/views/companyworkersview/create_companyworkersview';
 import UserEditView from './components/views/companyworkersview/edit_companyworkersview';
+import WorkTimeBrowseView from './components/views/worktimeview/worktimeview';
+import WorkTimeCreateView from './components/views/worktimeview/create_worktimeview';
+import WorkTimeEditView from './components/views/worktimeview/edit_worktimeview';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -37,6 +40,9 @@ root.render(
                 <Route path="/workers" element={<UserBrowseView />} />
                 <Route path="/workers/create" element={<UserCreateView />} />
                 <Route path="/workers/edit/:id" element={<UserEditView />} />
+                <Route path="/worktime" element={<WorkTimeBrowseView />} />
+                <Route path="/worktime/create" element={<WorkTimeCreateView />} />
+                <Route path="/worktime/edit/:id" element={<WorkTimeEditView />} />
               </Route>
             </Routes>
           </AuthWrapper>
