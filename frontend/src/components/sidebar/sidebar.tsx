@@ -18,6 +18,11 @@ const Menu: React.FC = () => {
             command: () => navigate('/worktime'),
         },
         {
+            label: 'Odsotnosti',
+            icon: 'pi pi-fw pi-calendar',
+            command: () => navigate('/absence'),
+        },
+        {
             label: 'Predloge',
             icon: 'pi pi-fw pi-file',
             command: () => navigate('/'),
