@@ -172,9 +172,9 @@ const AbsenceCreateView: React.FC = () => {
                                         showIcon
                                         dateFormat="dd.mm.yy"
                                         showButtonBar
-                                        tooltip="Izberite datum"
+                                        tooltip="Izberite datum začetka"
                                     />
-                                    <label htmlFor="DateFrom">Datum od</label>
+                                    <label htmlFor="DateFrom">Začetek odsotnosti</label>
                                 </FloatLabel>
                             </div>
                             <div className="input">
@@ -190,7 +190,7 @@ const AbsenceCreateView: React.FC = () => {
                                         showButtonBar
                                         dateFormat="dd.mm.yy"
                                         showIcon
-                                        tooltip="Izberite čas konca"
+                                        tooltip="Izberite datum konca"
                                     />
                                     <label htmlFor="DateTo">Konec odsotnosti</label>
                                 </FloatLabel>

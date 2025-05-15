@@ -48,7 +48,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
           Id: decoded.sub.Id
         };
         
-        setUser(userData);
+        // Check if user data has actually changed
+        if (
+          !user || // no current user
+          user.username !== userData.username ||
+          user.Id !== userData.Id
+        ) {
+          setUser(userData);
+        }
       } catch (error) {
         console.error('Error decoding token:', error);
         localStorage.removeItem('token');

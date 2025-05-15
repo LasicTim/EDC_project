@@ -46,11 +46,14 @@ def create_worker(user: users.WorkerCreate,
     existing_user = SqlExe(db, query)
     if existing_user or not is_valid_email(user.email):  # This means at least one user was found
         raise_exception(status_code=400, detail="User already exists")
+    password = user.password
+    if not password:
+        password = 'geslo123@'
 
     user_model = UserModel(
         username=user.username,
         email=user.email,
-        hashed_password=hash_password(user.password),
+        hashed_password=hash_password(password),
         DateChanged = current_datetime(),
         DateCreated = current_datetime(),
         first_name = user.first_name,

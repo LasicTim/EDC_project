@@ -9,6 +9,7 @@ import { useUser } from '../../../utils/UserContext';
 import axios from 'axios';
 import { showToast, showToastWithOutLoadRef } from '../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
+import { workTypeOptions } from './create_worktimeview';
 
 
 export interface WorkTime {
@@ -146,6 +147,11 @@ const WorkTimeBrowseView: React.FC = () => {
         return new Intl.DateTimeFormat('sl-SI', { hour: '2-digit', minute: '2-digit' }).format(localDate);
     };
 
+    const getWorkTypeLabel = (value: string) => {
+        const match = workTypeOptions.find(option => option.value === value);
+        return match ? match.label : value; // fallback to raw value if no match
+    };
+
     return (
         <div className="p-8 bg-white rounded-lg shadow-md">
             <Toast ref={toast} />
@@ -219,6 +225,7 @@ const WorkTimeBrowseView: React.FC = () => {
                     field="WorkType" 
                     header="Vrsta dela" 
                     sortable
+                    body={(rowData) => getWorkTypeLabel(rowData.WorkType)} 
                 />
                 <Column 
                     field="BreakTimeFrom" 

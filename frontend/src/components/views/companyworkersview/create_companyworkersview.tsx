@@ -23,19 +23,35 @@ interface User {
     first_name?: string;
     last_name?: string;
     birth_date?: Date | null;
-    phone_number?: string | undefined;
+    phone_number?: string | null;
     address?: string;
     city?: string;
     country?: string;
     IdCompany?: string | null;
-    password?: string | undefined;
+    password?: string | null;
     DateCreated: Date;
     DateChanged: Date;
 }
 
+const initialWorker: User = {
+    Id: '',
+    username: '',
+    email: '',
+    is_superuser: false,
+    first_name: '',
+    last_name: '',
+    birth_date: null,
+    phone_number: null,
+    address: '',
+    city: '',
+    country: '',
+    IdCompany: null,
+    DateCreated: new Date(),
+    DateChanged: new Date(),
+}
 
 const UserCreateView: React.FC = () => {
-    const [userdata, setUserData]  = useState<User | null>(null);
+    const [userdata, setUserData]  = useState<User>(initialWorker);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const { user, setUser } = useUser();
@@ -156,17 +172,10 @@ const UserCreateView: React.FC = () => {
                                 <FloatLabel>
                                     <Calendar  
                                         inputId="birth_date"
-                                        value={userdata?.birth_date ? new Date(userdata.birth_date) : undefined} // Convert string to Date
-                                        onChange={(e) => 
-                                            setUserData((prev) => {
-                                                if (!prev) return null;
-
-                                                return { 
-                                                    ...prev, 
-                                                    birth_date: e.value ?? undefined // Ensure undefined instead of null
-                                                };
-                                            })
-                                        }
+                                        value={userdata?.birth_date ?? null} // Ensure it's never null
+                                        onChange={(e) => setUserData((prev) =>
+                                            prev ? { ...prev, birth_date: e.target.value } : { birth_date: e.target.value } as User
+                                        )}
                                         showIcon 
                                     />
                                     <label htmlFor="birth_date">Datum rojstva</label>
@@ -216,18 +225,11 @@ const UserCreateView: React.FC = () => {
                                 <FloatLabel>
                                     <InputMask  
                                         id="phone_number" 
-                                        value={userdata?.phone_number ?? undefined} // Ensure it's never null
-                                        onChange={(e) => 
-                                            setUserData((prev) => {
-                                                if (!prev) return null; // If prev is null, return null to maintain state integrity
-                                                
-                                                return { 
-                                                    ...prev, 
-                                                    phone_number: e.target.value ?? undefined // Convert null to undefined
-                                                };
-                                            })
-                                        } 
-                                        mask="999-999-999" 
+                                        value={userdata?.phone_number ?? ''} // Ensure it's never null
+                                        onChange={(e) => setUserData((prev) =>
+                                            prev ? { ...prev, phone_number: e.target.value } : { phone_number: e.target.value } as User
+                                        )}
+                                        mask="999-999-999"
                                     />
                                     <label htmlFor="phone_number">Telefonska št.</label>
                                 </FloatLabel>
