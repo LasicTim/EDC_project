@@ -6,6 +6,16 @@ from pydantic import BaseModel
 from app.api.schemas.base import BaseSchema
 from app.api.schemas.companies import CompanyBase
 
+class VacationCriteria(BaseModel):
+    min_vacation_days: int
+    worker_older_then_55: int
+    underage_worker: int
+    disabled_worker: int
+    worker_disability_60_percent: int
+    night_worker: int
+    worker_with_disabled_children: int
+    total_working_time: int
+    work_complexity: int
 
 class UserBase(BaseSchema):
     username: str
@@ -18,6 +28,7 @@ class UserBase(BaseSchema):
     city: Optional[str] = None
     country: Optional[str] = None
     IdCompany: Optional[str] = None
+    vacation_criteria: Optional[VacationCriteria] = None
 
 
 class UserCreate(BaseModel):
@@ -36,8 +47,20 @@ class WorkerCreate(BaseModel):
     city: Optional[str] = None
     country: Optional[str] = None
     IdCompany: Optional[str] = None
+    vacation_criteria: Optional[VacationCriteria] = None
 
-
+class WorkerUpdate(BaseSchema):
+    username: str
+    email: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    birth_date: Optional[datetime] = None
+    phone_number: Optional[str] = None
+    address: Optional[str] = None
+    city: Optional[str] = None
+    country: Optional[str] = None
+    IdCompany: Optional[str] = None
+    vacation_criteria: Optional[VacationCriteria] = None
 
 class UserUpdate(BaseSchema):
     username: Optional[str] = None

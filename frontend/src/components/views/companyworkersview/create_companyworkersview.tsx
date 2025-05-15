@@ -14,6 +14,7 @@ import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { showToast, showToastWithOutLoadRef } from '../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
+import VacationCriteriaView, { VacationCriteria } from './vacation_criteria';
 
 interface User {
     Id: string;
@@ -31,6 +32,7 @@ interface User {
     password?: string | null;
     DateCreated: Date;
     DateChanged: Date;
+    vacation_criteria: VacationCriteria | null;
 }
 
 const initialWorker: User = {
@@ -48,6 +50,7 @@ const initialWorker: User = {
     IdCompany: null,
     DateCreated: new Date(),
     DateChanged: new Date(),
+    vacation_criteria: null,
 }
 
 const UserCreateView: React.FC = () => {
@@ -235,6 +238,21 @@ const UserCreateView: React.FC = () => {
                                 </FloatLabel>
                             </div>
                         </div>
+                    </TabPanel>
+                    <TabPanel header="Kriteriji dopusta">
+                        <div className='inputs'>
+                            <VacationCriteriaView
+                                criteria={userdata?.vacation_criteria ?? undefined}
+                                onChange={(criteria) => setUserData((prev) => {
+                                    if (prev) {
+                                        return { ...prev, vacation_criteria: criteria };
+                                    } else {
+                                        return { ...initialWorker, vacation_criteria: criteria };
+                                    }
+                                })}
+                            />
+                        </div>
+
                     </TabPanel>
                 </TabView>
             </Card>

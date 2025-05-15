@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 from fastapi import APIRouter, Depends
@@ -63,7 +64,8 @@ def create_worker(user: users.WorkerCreate,
         address = user.address,
         city = user.city,
         country = user.country,
-        IdCompany = current_user.IdCompany
+        IdCompany = current_user.IdCompany,
+        vacation_criteria = user.vacation_criteria
         )
     user_created = SqlInsert(db, user_model)
     return user_created
@@ -137,8 +139,8 @@ def update_user(user: users.UserBase,
     updated_user = db.execute(query).scalar_one()
     return updated_user
 
-@router.post("/update_worker", response_model=users.UserBase)
-def update_worker(user: users.UserBase,
+@router.post("/update_worker", response_model=users.WorkerUpdate)
+def update_worker(user: users.WorkerUpdate,
                 db: Session = Depends(get_db),
                 current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
     # Retrieve the existing user using the session's execute method
@@ -164,7 +166,8 @@ def update_worker(user: users.UserBase,
             address=user.address,
             city=user.city,
             country=user.country,
-            IdCompany=current_user.IdCompany
+            IdCompany=current_user.IdCompany,
+            vacation_criteria=json.dumps(user.vacation_criteria.model_dump()) if user.vacation_criteria else None
         )
         .execution_options(synchronize_session="fetch")
     )
@@ -173,6 +176,12 @@ def update_worker(user: users.UserBase,
 
     # Fetch and return the updated user
     updated_user = db.execute(query).scalar_one()
+    if updated_user.vacation_criteria:
+        try:
+            updated_user.vacation_criteria = json.loads(updated_user.vacation_criteria)
+        except json.JSONDecodeError:
+            updated_user.vacation_criteria = None
+
     return updated_user
 
 
@@ -187,6 +196,12 @@ def get_user_data(user: users.RequestUser,
     user_found = SqlExe(db, query)
     if not user_found:
         raise_exception(status_code=404, detail="User not found")
+
+    if user_found and user_found[0].get("vacation_criteria"):
+        try:
+            user_found[0]["vacation_criteria"] = json.loads(user_found[0]["vacation_criteria"])
+        except json.JSONDecodeError:
+            user_found[0]["vacation_criteria"] = None
     return user_found
 
 
