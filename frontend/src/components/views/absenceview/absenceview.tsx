@@ -9,6 +9,7 @@ import { useUser } from '../../../utils/UserContext';
 import axios from 'axios';
 import { showToast, showToastWithOutLoadRef } from '../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
+import { formatDate } from '../../../utils/time';
 
 
 export interface Absence {
@@ -63,7 +64,6 @@ const AbsenceBrowseView: React.FC = () => {
             });
             if (response.status === 200) {
                 setAbsences(response.data);
-                console.log("toast", toast.current)
                 showToast(toastLoadFormShown, toast);
                 
             }
@@ -130,16 +130,6 @@ const AbsenceBrowseView: React.FC = () => {
         </div>
     );
 
-    const formatDate = (date: Date) => {
-        if (!date) return ''; // Return empty string if no date is provided
-        return new Intl.DateTimeFormat('sl-SI').format(new Date(date));
-    };
-
-    const formatTime = (date: Date) => {
-        if (!date) return ''; // Return empty string if no date is provided
-        const localDate = new Date(date);
-        return new Intl.DateTimeFormat('sl-SI', { hour: '2-digit', minute: '2-digit' }).format(localDate);
-    };
 
     return (
         <div className="p-8 bg-white rounded-lg shadow-md">

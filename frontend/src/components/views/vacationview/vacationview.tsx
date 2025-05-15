@@ -9,29 +9,22 @@ import { useUser } from '../../../utils/UserContext';
 import axios from 'axios';
 import { showToast, showToastWithOutLoadRef } from '../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
-import { workTypeOptions } from './create_worktimeview';
-import { formatDate, formatTime } from '../../../utils/time';
+import { formatDate } from '../../../utils/time';
 
 
-export interface WorkTime {
+export interface Vacation {
     Id: string;
     IdWorker: string;
-    WorkType: string;
     DateCreated: Date;
     DateChanged: Date;
-    BreakTimeFrom: Date | null;
-    BreakTimeTo: Date | null;
-    HasBreakTime: boolean | undefined;
-    WorkDate: Date | null;
-    WorkTimeFrom: Date | null;
-    WorkTimeTo: Date | null;
+    DateFrom: Date | null;
+    DateTo: Date | null;
     Comment: string | null;
-    PlaceOfWork: string | null;
 }
 
-const WorkTimeBrowseView: React.FC = () => {
+const VacationBrowseView: React.FC = () => {
     const { user, setUser } = useUser();
-    const [workTimes, setWorkTimes] = useState<WorkTime[]>([]);
+    const [vacations, setVacations] = useState<Vacation[]>([]);
     const toast = useRef<Toast>(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
@@ -51,25 +44,25 @@ const WorkTimeBrowseView: React.FC = () => {
             return;
         }
 
-        fetchCompanyWorkTimes();
+        fetchCompanyVacations();
     }, [user]); // This will run whenever the `user` context changes
 
 
-    const fetchCompanyWorkTimes = async () => {
+    const fetchCompanyVacations = async () => {
         try {
 
             const companydata = {
                 Id_user: user?.Id,
             };
 
-                
-            const response = await api.post('/worktime/get_company_workers_worktime', companydata, {
+
+            const response = await api.post('/vacation/get_company_workers_vacations', companydata, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
             if (response.status === 200) {
-                setWorkTimes(response.data);
+                setVacations(response.data);
                 showToast(toastLoadFormShown, toast);
                 
             }
@@ -83,41 +76,41 @@ const WorkTimeBrowseView: React.FC = () => {
         }
     };
 
-    const handleEdit = (workTime_selected: WorkTime) => {
-        navigate(`/worktime/edit/${workTime_selected.Id}`);
+    const handleEdit = (vacation_selected: Vacation) => {
+        navigate(`/vacation/edit/${vacation_selected.Id}`);
         // navigate(`/edit-user/${user.Id}`) or open a dialog
     };
 
-    const handleDelete = async (workTime_selected: WorkTime) => {
+    const handleDelete = async (vacation_selected: Vacation) => {
         try {
 
-            const workTime_data = {
-                Id: workTime_selected.Id,
+            const vacation_data = {
+                Id: vacation_selected.Id,
             };
 
 
-            const response = await api.post('/worktime/delete_worktime', workTime_data, {
+            const response = await api.post('/vacation/delete_vacation', vacation_data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
             if (response.status === 200) {
 
-                showToastWithOutLoadRef(toast, 'success', "Uspeh", "Delovni čas izbrisan");
-                fetchCompanyWorkTimes();
+                showToastWithOutLoadRef(toast, 'success', "Uspeh", "Dopust izbrisana");
+                fetchCompanyVacations();
 
             }
         } catch (err) {
             if (axios.isAxiosError(err) && err.response) {
                 setError(err.response.data.detail);
             }
-            showToastWithOutLoadRef(toast, 'error', "Napaka", "Delovni čas ni bil mogoče izbrisati");
+            showToastWithOutLoadRef(toast, 'error', "Napaka", "Dopusta ni bila mogoče izbrisati");
         } finally {
             setLoading(false);
         }
     };
 
-    const actionTemplate = (rowData: WorkTime) => (
+    const actionTemplate = (rowData: Vacation) => (
         <div className="flex gap-2 justify-center">
             <Button 
                 icon="pi pi-pencil" 
@@ -135,10 +128,7 @@ const WorkTimeBrowseView: React.FC = () => {
             )}
         </div>
     );
-    const getWorkTypeLabel = (value: string) => {
-        const match = workTypeOptions.find(option => option.value === value);
-        return match ? match.label : value; // fallback to raw value if no match
-    };
+
 
     return (
         <div className="p-8 bg-white rounded-lg shadow-md">
@@ -148,26 +138,26 @@ const WorkTimeBrowseView: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b pb-6 mb-10">
                 <div className="flex-1">
                     <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                        Delovni časi podjetja
+                        Dopusti podjetja
                     </h2>
                 </div>
                 <Button
-                    label="Ustvari delovni čas"
+                    label="Ustvari dopust"
                     icon="pi pi-plus"
                     severity="success"
                     className="p-button-raised"
-                    onClick={() => navigate('/worktime/create')}
+                    onClick={() => navigate('/vacation/create')}
                 />
             </div>
 
             {/* Table Section */}
 
             <DataTable
-                value={workTimes}
+                value={vacations}
                 paginator
                 rows={10}
                 stripedRows
-                emptyMessage="Ni najdenih delovnih časov"
+                emptyMessage="Ni najdenih odsotnosti"
                 className="p-datatable-sm"
                 rowHover
                 size="small"
@@ -184,48 +174,24 @@ const WorkTimeBrowseView: React.FC = () => {
                     className="font-semibold"
                 />
                 <Column 
-                    field="username" 
+                    field="Username" 
                     header="Uporabniško ime" 
                     sortable 
                     className="font-semibold"
                 />
                 <Column 
-                    field="WorkDate" 
-                    header="Datum" 
-                    body={(rowData) => formatDate(rowData.WorkDate)}
+                    field="DateFrom"
+                    header="Od"
+                    body={(rowData) => formatDate(rowData.DateFrom)}
                     sortable
                     className="text-blue-600"
                 />
                 <Column 
-                    field="WorkTimeFrom" 
-                    header="Od" 
-                    body={(rowData) => formatTime(rowData.WorkTimeFrom)}
-                    sortable
-                    className="text-blue-600"
-                />
-                <Column 
-                    field="WorkTimeTo" 
+                    field="DateTo" 
                     header="Do" 
-                    body={(rowData) => formatTime(rowData.WorkTimeTo)}
+                    body={(rowData) => formatDate(rowData.DateTo)}
                     sortable
-                />
-                <Column 
-                    field="WorkType" 
-                    header="Vrsta dela" 
-                    sortable
-                    body={(rowData) => getWorkTypeLabel(rowData.WorkType)} 
-                />
-                <Column 
-                    field="BreakTimeFrom" 
-                    header="Odmor Od" 
-                    body={(rowData) => formatTime(rowData.BreakTimeFrom)}
-                    sortable
-                />
-                <Column 
-                    field="BreakTimeTo" 
-                    header="Odmor Do" 
-                    body={(rowData) => formatTime(rowData.BreakTimeTo)}
-                    sortable
+                    className="text-blue-600"
                 />
                 <Column 
                     header="Dejanja" 
@@ -239,4 +205,4 @@ const WorkTimeBrowseView: React.FC = () => {
     );
 };
 
-export default WorkTimeBrowseView;
+export default VacationBrowseView;

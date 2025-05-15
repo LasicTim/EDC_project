@@ -18,7 +18,7 @@ class UserModel(BaseSQLModel):
     address = Column(String(100))
     city = Column(String(50))
     country = Column(String(50))
-    vacation_left = Column(Integer)
+    vacation_used = Column(Integer)
     vacation_criteria = Column(Text)
     IdCompany = Column(String(36), ForeignKey('companies.Id'), nullable=True, index=True)
 

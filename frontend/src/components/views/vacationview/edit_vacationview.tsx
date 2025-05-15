@@ -14,7 +14,7 @@ import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 import { showToast, showToastWithOutLoadRef } from '../../../utils/toast';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Absence } from './absenceview';
+import { Vacation } from './vacationview';
 import { Dropdown } from 'primereact/dropdown';
 import { WorkerPicker } from '../../picker/workerpicker';
 import { ProgressSpinner } from 'primereact/progressspinner';
@@ -22,8 +22,8 @@ import { Checkbox } from 'primereact/checkbox';
 
 
 
-const AbsenceEditView: React.FC = () => {
-    const [absenceData, setAbsenceData] = useState<Absence | null>(null);
+const VacationEditView: React.FC = () => {
+    const [vacationData, setVacationData] = useState<Vacation | null>(null);
     const [loading, setLoading] = useState(true);
     const [content, setContent] = useState<string>('');
     const [error, setError] = useState('');
@@ -40,20 +40,16 @@ const AbsenceEditView: React.FC = () => {
 
     const validateForm = (): boolean => {
         let msg: Array<string> = [];
-        if (!absenceData?.DateFrom) {
+        if (!vacationData?.DateFrom) {
             msg.push("Datum od je obvezno");
 
         }
-        if (!absenceData?.DateTo) {
+        if (!vacationData?.DateTo) {
             msg.push("Datum do je obvezno");
 
         }
-        if (!absenceData?.IdWorker) {
+        if (!vacationData?.IdWorker) {
             msg.push("Delavec je obvezno");
-
-        }
-        if (!absenceData?.Reason) {
-            msg.push("Razlog odsotnosti je obvezno");
 
         }
         if (msg.length > 0) {
@@ -64,37 +60,37 @@ const AbsenceEditView: React.FC = () => {
     };
 
 
-    const updateAbsence = async () => {
+    const updateVacation = async () => {
         if (!validateForm()) return;
 
         try {
 
             setLoading(true);
 
-            console.log('absenceData:', absenceData);
+            console.log('vacationData:', vacationData);
 
-            const response = await api.post('/absence/update_absence', absenceData, {
+            const response = await api.post('/vacation/update_vacation', vacationData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
     
             if (response.status === 200) {
-                showToastWithOutLoadRef(updateErrorToast, 'success',"Urejanje", "Odsotnost urejena");
-                console.log('Updated absence successful',response.data );
-                setAbsenceData(response.data[0]);
+                showToastWithOutLoadRef(updateErrorToast, 'success',"Urejanje", "Dopust urejen");
+                console.log('Updated vacation successful',response.data );
+                setVacationData(response.data[0]);
                 userFetchedRef.current = true;
 
                 //navigate('/workers/edit/' + response.data.Id);
-                navigate('/absence');
+                navigate('/vacation');
             }
 
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
                 setError(error.response.data.detail);
-                console.error('Updated absence failed:', error.response.data.detail);
+                console.error('Updated vacation failed:', error.response.data.detail);
             } else {
-                console.error('Updated absence failed:', error);
+                console.error('Updated vacation failed:', error);
             }
             // Handle error (show error message to user)
         } finally {
@@ -119,16 +115,16 @@ const AbsenceEditView: React.FC = () => {
                     Id: id,  // Use the id from URL instead of user.Id
                 };
 
-                const response = await api.post('/absence/get_absence', userData, {
+                const response = await api.post('/vacation/get_vacation', userData, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 });
                 if (response.status === 200) {
                     console.log("response", response.data);
-                    setAbsenceData(response.data[0]);
+                    setVacationData(response.data[0]);
                     setContent(response.data[0].Comment);
-                    console.log("absencedate", absenceData);
+                    console.log("vacationdate", vacationData);
                     showToast(toastLoadFormShown, toast);
                 }
             } catch (err) {
@@ -154,11 +150,11 @@ const AbsenceEditView: React.FC = () => {
     return (
         
         <div className='userview'>
-            <Card title="Ustvarjanje odsotnosti" className='card'>
+            <Card title="Urejanje Dopusta" className='card'>
                 <div className='FormSaveButton'>
                     <Toast ref={toast}></Toast>
                     <Toast ref={updateErrorToast}></Toast>
-                    <Button label="Uredi odsotnost" iconPos="right" icon="pi pi-check" loading={loading} onClick={updateAbsence} />
+                    <Button label="Uredi dopust" iconPos="right" icon="pi pi-check" loading={loading} onClick={updateVacation} />
                 </div>
                 <TabView>
                     <TabPanel header="Osnovni podatki">
@@ -166,9 +162,9 @@ const AbsenceEditView: React.FC = () => {
                             <div className="input">
                                 <WorkerPicker
                                     currentUserId={user?.Id ?? ''}
-                                    selectedId={absenceData?.IdWorker ?? ''}
+                                    selectedId={vacationData?.IdWorker ?? ''}
                                     onSelect={(user) => {
-                                        setAbsenceData((prev) =>
+                                        setVacationData((prev) =>
                                             prev ? { ...prev, IdWorker: user?.Id ?? '' } : prev
                                         );
                                     }}
@@ -179,9 +175,9 @@ const AbsenceEditView: React.FC = () => {
                                 <FloatLabel>
                                     <Calendar
                                         id="DateFrom"
-                                        value={absenceData?.DateFrom ? new Date(absenceData.DateFrom) : null}
+                                        value={vacationData?.DateFrom ? new Date(vacationData.DateFrom) : null}
                                         onChange={(e) =>
-                                            setAbsenceData((prev) =>
+                                            setVacationData((prev) =>
                                                 prev ? { ...prev, DateFrom: e.value ?? null } : prev
                                             )
                                         }
@@ -197,9 +193,9 @@ const AbsenceEditView: React.FC = () => {
                                 <FloatLabel>
                                     <Calendar
                                         id="DateTo"
-                                        value={absenceData?.DateTo  ? new Date(absenceData.DateTo) : null}
+                                        value={vacationData?.DateTo  ? new Date(vacationData.DateTo) : null}
                                         onChange={(e) =>
-                                            setAbsenceData((prev) =>
+                                            setVacationData((prev) =>
                                                 prev ? { ...prev, DateTo: e.value ?? null } : prev
                                             )
                                         }
@@ -208,23 +204,7 @@ const AbsenceEditView: React.FC = () => {
                                         showIcon
                                         tooltip="Izberite datum konca"
                                     />
-                                    <label htmlFor="DateTo">Konec odsotnosti</label>
-                                </FloatLabel>
-                            </div>
-                            
-                            <div className="input">
-                                <FloatLabel>
-                                                                
-                                    <InputText
-                                        id="Reason"
-                                        value={absenceData?.Reason ?? ''}
-                                        onChange={(e) =>
-                                            setAbsenceData((prev) =>
-                                                prev ? { ...prev, Reason: e.target.value } : { Reason: e.target.value } as Absence
-                                            )
-                                        }
-                                    />
-                                    <label htmlFor="Reason">Razlog odsotnosti</label>
+                                    <label htmlFor="DateTo">Konec dopusta</label>
                                 </FloatLabel>
                             </div>
                             
@@ -233,8 +213,8 @@ const AbsenceEditView: React.FC = () => {
                                 <label htmlFor="Comment">Komentar</label>
                                 <TinyMCEEditor
                                     initialValue={content ?? ''}
-                                    onEditorChange={(newContent) => setAbsenceData((prev) =>
-                                        prev ? { ...prev, Comment: newContent } : { Comment: newContent } as Absence
+                                    onEditorChange={(newContent) => setVacationData((prev) =>
+                                        prev ? { ...prev, Comment: newContent } : { Comment: newContent } as Vacation
                                     )}
                                 />
                             </div>
@@ -249,4 +229,4 @@ const AbsenceEditView: React.FC = () => {
     );
 };
 
-export default AbsenceEditView;
+export default VacationEditView;

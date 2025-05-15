@@ -69,7 +69,6 @@ const UserBrowseView: React.FC = () => {
             });
             if (response.status === 200) {
                 setUsers(response.data);
-                console.log("toast", toast.current)
                 showToast(toastLoadFormShown, toast);
                 
             }

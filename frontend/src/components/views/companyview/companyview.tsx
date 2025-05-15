@@ -107,7 +107,6 @@ const CompanyView: React.FC = () => {
                 });
                 if (response.status === 200) {
                     setcompanydata(response.data[0]);
-                    console.log("toast", toast.current)
                     showToast(toastLoadFormShown, toast);
                     
                 }

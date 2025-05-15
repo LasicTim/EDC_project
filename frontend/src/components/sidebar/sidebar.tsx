@@ -23,6 +23,11 @@ const Menu: React.FC = () => {
             command: () => navigate('/absence'),
         },
         {
+            label: 'Dopusti',
+            icon: 'pi pi-fw pi-sun',
+            command: () => navigate('/vacation'),
+        },
+        {
             label: 'Predloge',
             icon: 'pi pi-fw pi-file',
             command: () => navigate('/'),

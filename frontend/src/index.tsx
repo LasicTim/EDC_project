@@ -23,6 +23,9 @@ import WorkTimeEditView from './components/views/worktimeview/edit_worktimeview'
 import AbsenceBrowseView from './components/views/absenceview/absenceview';
 import AbsenceCreateView from './components/views/absenceview/create_absenceview';
 import AbsenceEditView from './components/views/absenceview/edit_absenceview';
+import VacationBrowseView from './components/views/vacationview/vacationview';
+import VacationCreateView from './components/views/vacationview/create_vacationview';
+import VacationEditView from './components/views/vacationview/edit_vacationview';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -49,6 +52,9 @@ root.render(
                 <Route path="/absence" element={<AbsenceBrowseView />} />
                 <Route path="/absence/create" element={<AbsenceCreateView />} />
                 <Route path="/absence/edit/:id" element={<AbsenceEditView />} />
+                <Route path="/vacation" element={<VacationBrowseView />} />
+                <Route path="/vacation/create" element={<VacationCreateView />} />
+                <Route path="/vacation/edit/:id" element={<VacationEditView />} />
               </Route>
             </Routes>
           </AuthWrapper>
