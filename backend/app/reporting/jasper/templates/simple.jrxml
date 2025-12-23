@@ -7,7 +7,7 @@
 
     <!-- Fields -->
     <field name="name" class="java.lang.String"/>
-    <field name="score" class="java.lang.Integer"/>
+    <field name="score" class="java.lang.String"/>
 
     <!-- Title -->
     <title>

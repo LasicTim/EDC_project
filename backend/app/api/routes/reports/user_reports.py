@@ -22,7 +22,20 @@ def create_user_reports(db: Session = Depends(get_db)):
         timestamp = current_datetime().strftime("%Y%m%d%H%M%S")
         output_file = os.path.join(settings.reports_dir, f"user_report_{timestamp}")
 
-        jasper_report = JasperReport(input_file='simple_report.jrxml', output_file=output_file, output_formats=["pdf"])
+
+        data = [
+            {
+                "Name": "Tim",
+                "Score": "4"
+            },
+            {
+                "Name": "Tim1",
+                "Score": "5"
+            }
+        ]
+
+        jasper_report = JasperReport(input_file='simple_report.jrxml', output_file=output_file, output_formats=["pdf"],
+                                     report_type="json", data=data)
         report_url = jasper_report.report_url
 
         return JSONResponse(content={"status": "success", "url": report_url})

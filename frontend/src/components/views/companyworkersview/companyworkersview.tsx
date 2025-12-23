@@ -82,6 +82,37 @@ const UserBrowseView: React.FC = () => {
         }
     };
 
+    const printWorkers = async () => {
+        try {
+
+            const companydata = {
+                IdUser: user?.Id,
+            };
+
+                
+            const response = await api.post('/reports/create_user_reports', companydata, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            debugger;
+            if (response.status === 200) {
+                const reportUrl = response.data.report_url;
+                // Open the report in a new tab
+                window.open(reportUrl, '_blank');
+                showToastWithOutLoadRef(toast, 'success', "Uspeh", "Poročilo ustvarjeno");
+                
+            }
+        } catch (err) {
+            if (axios.isAxiosError(err) && err.response) {
+                setError(err.response.data.detail);
+            }
+        } finally {
+            setLoading(false);
+            
+        }
+    };
+
     const handleEdit = (user_selected: User) => {
         navigate(`/workers/edit/${user_selected.Id}`);
         // navigate(`/edit-user/${user.Id}`) or open a dialog
@@ -154,6 +185,12 @@ const UserBrowseView: React.FC = () => {
                     className="p-button-raised" 
                     onClick={() => navigate('/workers/create')}
                 />
+                <Button
+                    label="Izpis podatkov"
+                    iconPos="right"
+                    icon="pi pi-print"
+                    onClick={printWorkers} />
+                
             </div>
 
             {/* Table Section */}
