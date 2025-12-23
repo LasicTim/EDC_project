@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     secret_key: str
     algorithm: str
     access_token_expire_minutes: int
+    reports_dir: str
 
     class Config:
         env_file = os.path.join(os.path.dirname(__file__), '../.env')

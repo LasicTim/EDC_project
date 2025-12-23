@@ -1,8 +1,13 @@
+import os
+
 from fastapi import FastAPI
 
 from app.api.routes import users, auth, companies, worktime, absence, vacation  # Import your API routes
+from app.api.routes.reports import user_reports
+from app.core.config import settings
 from app.db.base import engine, Base
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 Base.metadata.create_all(bind=engine)  # Create the database tables
 
@@ -16,6 +21,7 @@ app.include_router(companies.router)
 app.include_router(worktime.router)
 app.include_router(absence.router)
 app.include_router(vacation.router)
+app.include_router(user_reports.router)
 
 origins = [
     "http://localhost:3000",
@@ -29,6 +35,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+os.makedirs(settings.reports_dir, exist_ok=True)
+app.mount("/generated_reports", StaticFiles(directory="generated_reports"), name="generated_reports")
 
 
 # Root endpoint
