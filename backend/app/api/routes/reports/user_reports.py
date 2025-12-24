@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
-import os
 from sqlalchemy.orm import Session
 
-from app.core.config import settings
+from app.api.schemas import companies
 from app.db.base import get_db
-from app.utils.time import current_datetime
+from app.reporting.jinja.report import Report
+from app.reporting.jinja.utils import get_jinja_template_path
+from app.utils.company_utils import get_company_workers
 
 router = APIRouter(
     prefix="/reports",
@@ -14,29 +15,20 @@ router = APIRouter(
 
 
 @router.post("/create_user_reports")
-def create_user_reports(db: Session = Depends(get_db)):
+def create_user_reports(company: companies.GetCompany, db: Session = Depends(get_db)):
     try:
-        from app.reporting.jasper.report import JasperReport
 
-        # Example: generate PDF using JasperPy
-        timestamp = current_datetime().strftime("%Y%m%d%H%M%S")
-        output_file = os.path.join(settings.reports_dir, f"user_report_{timestamp}")
+        all_workers = get_company_workers(company.IdUser,db)
 
+        input_file = get_jinja_template_path("user_browse.html")
+        out_file_name = 'Izpis_delavcev'
+        out_file_format = 'pdf'
 
-        data = [
-            {
-                "Name": "Tim",
-                "Score": "4"
-            },
-            {
-                "Name": "Tim1",
-                "Score": "5"
-            }
-        ]
+        report = Report(input_file, out_file_name, out_file_format)
+        report.render({"users": all_workers})
+        # after rendering it should be saved in correct directory
+        report_url = report.url
 
-        jasper_report = JasperReport(input_file='simple_report.jrxml', output_file=output_file, output_formats=["pdf"],
-                                     report_type="json", data=data)
-        report_url = jasper_report.report_url
 
         return JSONResponse(content={"status": "success", "url": report_url})
 

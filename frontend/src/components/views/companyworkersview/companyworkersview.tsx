@@ -97,7 +97,7 @@ const UserBrowseView: React.FC = () => {
             });
             debugger;
             if (response.status === 200) {
-                const reportUrl = response.data.report_url;
+                const reportUrl = response.data.url;
                 // Open the report in a new tab
                 window.open(reportUrl, '_blank');
                 showToastWithOutLoadRef(toast, 'success', "Uspeh", "Poročilo ustvarjeno");
@@ -190,7 +190,6 @@ const UserBrowseView: React.FC = () => {
                     iconPos="right"
                     icon="pi pi-print"
                     onClick={printWorkers} />
-                
             </div>
 
             {/* Table Section */}

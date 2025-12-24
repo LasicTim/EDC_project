@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from app.api.routes import users, auth, companies, worktime, absence, vacation  # Import your API routes
 from app.api.routes.reports import user_reports
+from app.constants import GENERATED_REPORTS_DIR, BACKEND_URL, FRONTEND_URL
 from app.core.config import settings
 from app.db.base import engine, Base
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,8 +25,8 @@ app.include_router(vacation.router)
 app.include_router(user_reports.router)
 
 origins = [
-    "http://localhost:3000",
-    "http://localhost:8000",
+    FRONTEND_URL,
+    BACKEND_URL,
 ]
 
 app.add_middleware(
@@ -35,8 +36,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-os.makedirs(settings.reports_dir, exist_ok=True)
+reports_dir = GENERATED_REPORTS_DIR
+os.makedirs(reports_dir, exist_ok=True)
 app.mount("/generated_reports", StaticFiles(directory="generated_reports"), name="generated_reports")
 
 

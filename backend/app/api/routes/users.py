@@ -2,20 +2,18 @@ import json
 from datetime import datetime
 
 from fastapi import APIRouter, Depends
-from fastapi.openapi.models import Response
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import Select, and_, update
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 
-from app.api.schemas import schemas, companies, users
+from app.api.schemas import  users
 from app.core.auth import Authenticate
-from app.core.hashing import hash_password, verify_password
+from app.core.hashing import hash_password
 from app.db.base import get_db
 from app.db.models.models import UserModel, CompanyModel
 from app.exceptions import raise_exception
-from app.utils.sql_utils import SqlInsert, SqlExe, SqlExeAndCommit, SqlExeWithMapping
+from app.utils.sql_utils import SqlInsert, SqlExe, SqlExeAndCommit
 from app.utils.email import is_valid_email, is_valid_password
-from app.utils.time import current_datetime, convert_to_utc_datetime, convert_utc_to_local
+from app.utils.time import current_datetime, convert_utc_to_local
 
 router = APIRouter(
     prefix="/users",

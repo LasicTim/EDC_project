@@ -8,6 +8,7 @@ from app.core.hashing import hash_password
 from app.db.base import get_db
 from app.db.models.models import CompanyModel, UserModel
 from app.exceptions import raise_exception
+from app.utils.company_utils import get_company_workers
 from app.utils.email import is_valid_email
 from app.utils.sql_utils import SqlInsert, SqlExe, SqlExeAndCommit
 from app.utils.time import current_datetime
@@ -78,36 +79,10 @@ def get_company(company: companies.GetCompany,
 @router.post("/get_company_workers", response_model=list[users.ResponseCompanyUser])
 def get_company(company: companies.GetCompany,
              db: Session = Depends(get_db),
-             current_user: UserModel = Depends(Authenticate.get_current_user)) -> CompanyModel:
+             current_user: UserModel = Depends(Authenticate.get_current_user)) -> list[users.ResponseCompanyUser]:
 
+    users_found = get_company_workers(company.IdUser, db)
 
-    query = (Select(
-        *CompanyModel.__table__.columns
-    ).select_from(
-        outerjoin(UserModel, CompanyModel, UserModel.IdCompany == CompanyModel.Id)
-    )
-    .where(and_(
-        UserModel.Id == company.IdUser,
-        CompanyModel.Active == True
-        ))
-    )
-
-    company_found = SqlExe(db, query)
-    if not company_found:
-        raise_exception(status_code=404, detail="company not found")
-    company_id = company_found[0]["Id"]
-    query = (Select(
-        UserModel.Id,
-        UserModel.username,
-        UserModel.email,
-        UserModel.first_name,
-        UserModel.last_name
-    ).where(and_(
-        UserModel.IdCompany == company_id,
-        UserModel.Active == True
-        ))
-    )
-    users_found = SqlExe(db, query)
     if not users_found:
         raise_exception(status_code=404, detail="users not found")
 
