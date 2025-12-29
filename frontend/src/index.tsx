@@ -26,6 +26,10 @@ import AbsenceEditView from './components/views/absenceview/edit_absenceview';
 import VacationBrowseView from './components/views/vacationview/vacationview';
 import VacationCreateView from './components/views/vacationview/create_vacationview';
 import VacationEditView from './components/views/vacationview/edit_vacationview';
+import CustomTemplateBrowseView from './components/views/custom_templateview/custom_template';
+import CustomTemplateCreateView from './components/views/custom_templateview/create_custom_template';
+import CustomTemplateEditView from './components/views/custom_templateview/edit_custom_template';
+import GeneratedReportsBrowseView from './components/views/generated_reports/generated_reports';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -44,6 +48,7 @@ root.render(
                 <Route path="/company" element={<CompanyView />} />
                 <Route path="/user" element={<UserView />} />
                 <Route path="/workers" element={<UserBrowseView />} />
+                <Route path="/generated_reports" element={<GeneratedReportsBrowseView />} />
                 <Route path="/workers/create" element={<UserCreateView />} />
                 <Route path="/workers/edit/:id" element={<UserEditView />} />
                 <Route path="/worktime" element={<WorkTimeBrowseView />} />
@@ -55,6 +60,9 @@ root.render(
                 <Route path="/vacation" element={<VacationBrowseView />} />
                 <Route path="/vacation/create" element={<VacationCreateView />} />
                 <Route path="/vacation/edit/:id" element={<VacationEditView />} />
+                <Route path="/custom_templates" element={<CustomTemplateBrowseView />} />
+                <Route path="/custom_templates/create" element={<CustomTemplateCreateView />} />
+                <Route path="/custom_templates/edit/:id" element={<CustomTemplateEditView />} />
               </Route>
             </Routes>
           </AuthWrapper>

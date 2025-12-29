@@ -2,7 +2,7 @@ import os
 
 from fastapi import FastAPI
 
-from app.api.routes import users, auth, companies, worktime, absence, vacation  # Import your API routes
+from app.api.routes import users, auth, companies, worktime, absence, vacation, custom_templates  # Import your API routes
 from app.api.routes.reports import user_reports
 from app.constants import GENERATED_REPORTS_DIR, BACKEND_URL, FRONTEND_URL
 from app.core.config import settings
@@ -23,6 +23,7 @@ app.include_router(worktime.router)
 app.include_router(absence.router)
 app.include_router(vacation.router)
 app.include_router(user_reports.router)
+app.include_router(custom_templates.router)
 
 origins = [
     FRONTEND_URL,

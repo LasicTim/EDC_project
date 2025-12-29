@@ -1,9 +1,15 @@
+import os
+
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from app.api.schemas import companies
+from app.constants import GENERATED_REPORTS_DIR, BACKEND_URL
+from app.core.auth import Authenticate
+from app.core.config import settings
 from app.db.base import get_db
+from app.db.models.models import UserModel
 from app.reporting.jinja.report import Report
 from app.reporting.jinja.utils import get_jinja_template_path
 from app.utils.company_utils import get_company_workers
@@ -34,3 +40,18 @@ def create_user_reports(company: companies.GetCompany, db: Session = Depends(get
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Report generation failed: {str(e)}")
+
+@router.get("/get_all_reports")
+def get_all_reports(current_user: UserModel = Depends(Authenticate.get_current_user)):
+    # get all file urls from GENERATED_REPORTS_DIR directory and return them
+    reports = []
+    for filename in os.listdir(GENERATED_REPORTS_DIR):
+        if filename.endswith(".pdf"):
+            output_file = f"{settings.reports_dir}/{filename}"
+            report = {
+                "name": filename,
+                "url": f"{BACKEND_URL}/{output_file}"
+            }
+            reports.append(report)
+
+    return JSONResponse(content={"status": "success", "reports": reports})

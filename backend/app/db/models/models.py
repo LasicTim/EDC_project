@@ -77,3 +77,12 @@ class WorkTimeModel(BaseSQLModel):
 
     # Relationships
     user = relationship("UserModel", viewonly=True)
+
+class CustomTemplateModel(BaseSQLModel):
+    __tablename__ = 'custom_templates'
+    title = Column(String(100))
+    content = Column(Text)
+    IdWorker = Column(String(36), ForeignKey('users.Id'), nullable=True, index=True)
+
+    # Relationships
+    user = relationship("UserModel", viewonly=True)

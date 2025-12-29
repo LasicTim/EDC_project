@@ -30,12 +30,12 @@ const Menu: React.FC = () => {
         {
             label: 'Predloge',
             icon: 'pi pi-fw pi-file',
-            command: () => navigate('/'),
+            command: () => navigate('/custom_templates'),
         },
         {
             label: 'Dokumenti',
             icon: 'pi pi-fw pi-book',
-            command: () => navigate('/'),
+            command: () => navigate('/generated_reports'),
         },
         {
             label: 'Podjetje',
