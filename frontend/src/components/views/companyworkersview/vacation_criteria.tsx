@@ -84,7 +84,7 @@ const VacationCriteriaView: React.FC<VacationCriteriaProps> = ({ Id_Worker, crit
     };
 
     return (
-        <div className="p-fluid p-4 max-w-md grid gap-4">
+        <div className="p-fluid">
             <Toast ref={toast} />
 
             <div className="field">
@@ -168,7 +168,7 @@ const VacationCriteriaView: React.FC<VacationCriteriaProps> = ({ Id_Worker, crit
                 />
             </div>
 
-            <div className="field font-bold text-right pt-4">
+            <div className="field">
                 Skupna vrednost: {totalVacationDays || Object.values(currentCriteria).reduce((sum, val) => sum + (val || 0), 0)} dni
             </div>      
         </div>

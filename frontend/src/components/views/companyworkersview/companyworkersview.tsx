@@ -3,7 +3,6 @@ import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
-import { ToastMessage } from 'primereact/toast';
 import { api } from '../../../api';
 import { useUser } from '../../../utils/UserContext';
 import axios from 'axios';
@@ -95,7 +94,6 @@ const UserBrowseView: React.FC = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            debugger;
             if (response.status === 200) {
                 const reportUrl = response.data.url;
                 // Open the report in a new tab
@@ -168,16 +166,18 @@ const UserBrowseView: React.FC = () => {
     );
 
     return (
-        <div className="p-8 bg-white rounded-lg shadow-md">
+        <div className="p-8 bg-red rounded-lg shadow-md">
             <Toast ref={toast} />
             
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b pb-6 mb-10">
-                <div className="flex-1">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">
+
+            <div>
+                <div>
+                    <h2>
                         Delavci podjetja
                     </h2>
                 </div>
+                
                 <Button 
                     label="Ustvari uporabnika" 
                     icon="pi pi-plus"
@@ -189,6 +189,7 @@ const UserBrowseView: React.FC = () => {
                     label="Izpis podatkov"
                     iconPos="right"
                     icon="pi pi-print"
+                    style={{ marginLeft: '1rem' }}
                     onClick={printWorkers} />
             </div>
 

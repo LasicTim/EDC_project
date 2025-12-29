@@ -141,13 +141,13 @@ const WorkTimeBrowseView: React.FC = () => {
     };
 
     return (
-        <div className="p-8 bg-white rounded-lg shadow-md">
+        <div >
             <Toast ref={toast} />
             
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b pb-6 mb-10">
-                <div className="flex-1">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            <div >
+                <div>
+                    <h2>
                         Delovni časi podjetja
                     </h2>
                 </div>
@@ -168,7 +168,6 @@ const WorkTimeBrowseView: React.FC = () => {
                 rows={10}
                 stripedRows
                 emptyMessage="Ni najdenih delovnih časov"
-                className="p-datatable-sm"
                 rowHover
                 size="small"
                 scrollable
