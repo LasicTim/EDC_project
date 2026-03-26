@@ -89,7 +89,7 @@ const UserBrowseView: React.FC = () => {
             };
 
                 
-            const response = await api.post('/reports/create_user_reports', companydata, {
+            const response = await api.post('/reports/create_user_reports_v2', companydata, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

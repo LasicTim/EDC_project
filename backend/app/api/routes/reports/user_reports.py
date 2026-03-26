@@ -10,7 +10,7 @@ from app.core.auth import Authenticate
 from app.core.config import settings
 from app.db.base import get_db
 from app.db.models.models import UserModel
-from app.reporting.jinja.report import Report
+from app.reporting.jinja.report import Report, Report_V2
 from app.reporting.jinja.utils import get_jinja_template_path
 from app.utils.company_utils import get_company_workers
 
@@ -37,6 +37,24 @@ def create_user_reports(company: companies.GetCompany, db: Session = Depends(get
 
 
         return JSONResponse(content={"status": "success", "url": report_url})
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Report generation failed: {str(e)}")
+
+@router.post("/create_user_reports_v2")
+def create_user_reports_v2(company: companies.GetCompany, db: Session = Depends(get_db)):
+    try:
+
+        all_workers = get_company_workers(company.IdUser, db)
+
+        template_name = "user_browse.html"
+        out_file_name = 'Izpis_delavcev'
+        out_file_format = 'pdf'
+
+        report = Report_V2(template_name, out_file_name, out_file_format)
+        report.render({"users": all_workers})
+
+        return JSONResponse(content={"status": "success", "url": report.url})
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Report generation failed: {str(e)}")
