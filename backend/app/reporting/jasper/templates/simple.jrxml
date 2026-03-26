@@ -1,54 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
-                                  http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
-              name="SimpleReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="12345678-1234-1234-1234-123456789012">
-
-    <!-- Fields -->
-    <field name="name" class="java.lang.String"/>
-    <field name="score" class="java.lang.String"/>
-
-    <!-- Title -->
-    <title>
-        <band height="50">
-            <staticText>
-                <reportElement x="0" y="0" width="555" height="30"/>
-                <textElement textAlignment="Center">
-                    <font size="18" isBold="true"/>
-                </textElement>
-                <text><![CDATA[Simple Report]]></text>
-            </staticText>
-        </band>
-    </title>
-
-    <!-- Column Headers -->
-    <columnHeader>
-        <band height="20">
-            <staticText>
-                <reportElement x="0" y="0" width="277" height="20"/>
-                <textElement textAlignment="Left" verticalAlignment="Middle" />
-                <text><![CDATA[Name]]></text>
-            </staticText>
-            <staticText>
-                <reportElement x="277" y="0" width="278" height="20"/>
-                <textElement textAlignment="Left" verticalAlignment="Middle" />
-                <text><![CDATA[Score]]></text>
-            </staticText>
-        </band>
-    </columnHeader>
-
-    <!-- Detail Band -->
-    <detail>
-        <band height="20">
-            <textField>
-                <reportElement x="0" y="0" width="277" height="20"/>
-                <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="277" y="0" width="278" height="20"/>
-                <textFieldExpression><![CDATA[$F{score}]]></textFieldExpression>
-            </textField>
-        </band>
-    </detail>
+<!-- Created with Jaspersoft Studio version 6.2.1.final using JasperReports Library version 6.2.1  -->
+<!-- 2026-03-25T15:25:25 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SimpleReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="12345678-1234-1234-1234-123456789012">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="edc_database"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<queryString>
+		<![CDATA[select * from users]]>
+	</queryString>
+	<field name="username" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="hashed_password" class="java.lang.String"/>
+	<field name="is_superuser" class="java.lang.Boolean"/>
+	<field name="first_name" class="java.lang.String"/>
+	<field name="last_name" class="java.lang.String"/>
+	<field name="birth_date" class="java.sql.Timestamp"/>
+	<field name="phone_number" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="country" class="java.lang.String"/>
+	<field name="IdCompany" class="java.lang.String"/>
+	<field name="Id" class="java.lang.String"/>
+	<field name="DateCreated" class="java.sql.Timestamp"/>
+	<field name="DateChanged" class="java.sql.Timestamp"/>
+	<field name="Active" class="java.lang.Boolean"/>
+	<field name="UserCreated" class="java.lang.String"/>
+	<field name="UserChanged" class="java.lang.String"/>
+	<field name="vacation_used" class="java.lang.Integer"/>
+	<field name="vacation_criteria" class="java.lang.String"/>
+	<variable name="vacation_used_SUM" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{vacation_used}]]></variableExpression>
+	</variable>
+	<title>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="30" uuid="e702e31e-96b3-45c2-88e0-050bdb36cd14"/>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Enostavno poročilo]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement x="0" y="0" width="277" height="20" uuid="bf1fd2f1-f451-4277-ba04-5636c83d1f89"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Ime]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="0" width="278" height="20" uuid="4aa10f99-577f-4336-bbd7-2f7838602f2d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Priimek]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="277" height="20" uuid="1f4dae32-d951-41d6-8a75-cdf01c0e89fd"/>
+				<textFieldExpression><![CDATA[$F{first_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="277" y="0" width="278" height="20" uuid="fbc88eb8-74eb-49fc-9a06-e0a8fac8854f"/>
+				<textFieldExpression><![CDATA[$F{last_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
 </jasperReport>
