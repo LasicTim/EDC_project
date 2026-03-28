@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from app.constants import GENERATED_REPORTS_DIR
+from app.constants import GENERATED_REPORTS_DIR, BACKEND_URL
 from app.core.config import settings
 import requests
 
@@ -14,8 +14,11 @@ class Report_Jasper:
         self.json_data = json_data
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         base_name = os.path.splitext(output_file)[0]
+        self.output_file_name = os.path.join(
+            settings.reports_dir, f"{base_name}_jasper_{timestamp}.{output_format}"
+        )
         self.output_file = os.path.join(
-            GENERATED_REPORTS_DIR, f"{base_name}_{timestamp}.{output_format}"
+            GENERATED_REPORTS_DIR, f"{base_name}_jasper_{timestamp}.{output_format}"
         )
         self.url = ''
 
@@ -42,7 +45,7 @@ class Report_Jasper:
 
             resp_json = response.json()
             if resp_json.get("status") == "success":
-                self.url = self.output_file
+                self.url = f"{BACKEND_URL}/{self.output_file_name}"
                 return True, "Report generated successfully"
             else:
                 return False, resp_json.get("message", "Unknown error from Java API")
