@@ -180,3 +180,5 @@ cython_debug/
 /backend/.idea
 /backend/app/generated_reports
 
+/java_api/WEB-INF/classes/*
+/java_api/WEB-INF/lib/*

@@ -1,41 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.1.final using JasperReports Library version 6.2.1  -->
-<!-- 2026-03-25T15:25:25 -->
+<!-- 2026-03-28T17:05:37 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SimpleReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="12345678-1234-1234-1234-123456789012">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="edc_database"/>
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<queryString>
-		<![CDATA[select * from users]]>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="edc_json_adapter"/>
+	<queryString language="JSON">
+		<![CDATA[]]>
 	</queryString>
-	<field name="username" class="java.lang.String"/>
-	<field name="email" class="java.lang.String"/>
-	<field name="hashed_password" class="java.lang.String"/>
-	<field name="is_superuser" class="java.lang.Boolean"/>
-	<field name="first_name" class="java.lang.String"/>
-	<field name="last_name" class="java.lang.String"/>
-	<field name="birth_date" class="java.sql.Timestamp"/>
-	<field name="phone_number" class="java.lang.String"/>
-	<field name="address" class="java.lang.String"/>
-	<field name="city" class="java.lang.String"/>
-	<field name="country" class="java.lang.String"/>
-	<field name="IdCompany" class="java.lang.String"/>
-	<field name="Id" class="java.lang.String"/>
-	<field name="DateCreated" class="java.sql.Timestamp"/>
-	<field name="DateChanged" class="java.sql.Timestamp"/>
-	<field name="Active" class="java.lang.Boolean"/>
-	<field name="UserCreated" class="java.lang.String"/>
-	<field name="UserChanged" class="java.lang.String"/>
-	<field name="vacation_used" class="java.lang.Integer"/>
-	<field name="vacation_criteria" class="java.lang.String"/>
-	<variable name="vacation_used_SUM" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{vacation_used}]]></variableExpression>
-	</variable>
+	<field name="Id" class="java.lang.String">
+		<fieldDescription><![CDATA[Id]]></fieldDescription>
+	</field>
+	<field name="username" class="java.lang.String">
+		<fieldDescription><![CDATA[username]]></fieldDescription>
+	</field>
+	<field name="email" class="java.lang.String">
+		<fieldDescription><![CDATA[email]]></fieldDescription>
+	</field>
+	<field name="first_name" class="java.lang.String">
+		<fieldDescription><![CDATA[first_name]]></fieldDescription>
+	</field>
+	<field name="last_name" class="java.lang.String">
+		<fieldDescription><![CDATA[last_name]]></fieldDescription>
+	</field>
 	<title>
 		<band height="50">
 			<staticText>
 				<reportElement x="0" y="0" width="555" height="30" uuid="e702e31e-96b3-45c2-88e0-050bdb36cd14"/>
 				<textElement textAlignment="Center">
-					<font size="18" isBold="true"/>
+					<font fontName="DejaVu Sans" size="18" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Enostavno poročilo]]></text>
 			</staticText>
@@ -45,12 +36,16 @@
 		<band height="20">
 			<staticText>
 				<reportElement x="0" y="0" width="277" height="20" uuid="bf1fd2f1-f451-4277-ba04-5636c83d1f89"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" pdfEncoding="Cp1250"/>
+				</textElement>
 				<text><![CDATA[Ime]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="277" y="0" width="278" height="20" uuid="4aa10f99-577f-4336-bbd7-2f7838602f2d"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" pdfEncoding="Cp1250"/>
+				</textElement>
 				<text><![CDATA[Priimek]]></text>
 			</staticText>
 		</band>
@@ -59,10 +54,16 @@
 		<band height="20">
 			<textField>
 				<reportElement x="0" y="0" width="277" height="20" uuid="1f4dae32-d951-41d6-8a75-cdf01c0e89fd"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="12" pdfEncoding="Cp1250"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{first_name}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="277" y="0" width="278" height="20" uuid="fbc88eb8-74eb-49fc-9a06-e0a8fac8854f"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="12" pdfEncoding="Cp1250"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{last_name}]]></textFieldExpression>
 			</textField>
 		</band>

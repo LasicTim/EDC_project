@@ -1,60 +1,51 @@
-import json
 import os
-import tempfile
-from typing import List, Any, Dict
+from datetime import datetime
 
-from pyreportjasper import PyReportJasper
-
+from app.constants import GENERATED_REPORTS_DIR
 from app.core.config import settings
-
-
-class JasperReport:
-    def __init__(self, input_file:str, output_file:str, output_formats:List[str], report_type: str, data:List[Any],
-                 json_query:str=None):
-        reports_dir = settings.reports_dir
-        self.input_file = os.path.join(reports_dir, input_file)
-        self.output_file = os.path.join(reports_dir, output_file)
-        self.output_formats = output_formats
-        self.type = report_type
-        self.data = data
-        self.json_query = json_query
-
-        if not self.output_formats or not self.output_file or not self.input_file or not self.type or not self.data:
-            raise ValueError("Invalid JasperReport configuration")
-
-        self.compile_and_process()
-        # Build URL (local server for demo purposes)
-        self.report_url = f"http://localhost:8000/{output_file}.pdf"
-
-    def compile_and_process(self):
-        report_types = {
-            "json": lambda x: self.use_json_report(self.data),
-        }
-
-        create_report_fn = report_types.get(self.type)
-        if create_report_fn:
-            create_report_fn(self.data)
+import requests
 
 
 
-    def use_json_report(self, data:List[Any]):
-        pyreportjasper = PyReportJasper()
-        with tempfile.NamedTemporaryFile(mode="w+", suffix=".json", delete=True) as tmp:
-            json.dump(data, tmp)
-            tmp.flush()  # Ensure data is written to disk
+class Report_Jasper:
+    def __init__(self, template_file, output_file, output_format, json_data):
+        self.template_name = template_file
+        self.output_format = output_format
+        self.json_data = json_data
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        base_name = os.path.splitext(output_file)[0]
+        self.output_file = os.path.join(
+            GENERATED_REPORTS_DIR, f"{base_name}_{timestamp}.{output_format}"
+        )
+        self.url = ''
 
-            # Pass tmp.name to your JasperReport
-            con = {
-                "driver": "json",
-                "data_file": tmp.name,
-                "json_query": self.json_query
+        if self.output_format not in ["pdf", "html"]:
+            raise ValueError(f"Unsupported output format: {self.output_format}")
+
+
+    def generate(self):
+        """
+        Sends request to Java API and generates the report.
+        Returns: (status: bool, message: str)
+        """
+        try:
+            payload = {
+                "template_file": self.template_name,
+                "output_file": self.output_file,
+                "data": {
+                    "root": self.json_data
+                }
             }
-            pyreportjasper.config(
-                self.input_file,
-                self.output_file,
-                output_formats=self.output_formats,
-                locale='sl_SI',
-                db_connection=con
-            )
-            pyreportjasper.compile(write_jasper=True)
-            pyreportjasper.process_report()
+
+            response = requests.post(settings.java_api_url, json=payload, timeout=30)
+            response.raise_for_status()
+
+            resp_json = response.json()
+            if resp_json.get("status") == "success":
+                self.url = self.output_file
+                return True, "Report generated successfully"
+            else:
+                return False, resp_json.get("message", "Unknown error from Java API")
+
+        except requests.RequestException as e:
+            return False, f"Request to Java API failed: {str(e)}"

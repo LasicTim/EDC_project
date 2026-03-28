@@ -89,7 +89,7 @@ const UserBrowseView: React.FC = () => {
             };
 
                 
-            const response = await api.post('/reports/create_user_reports_v2', companydata, {
+            const response = await api.post('/reports/create_user_reports_jasper', companydata, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

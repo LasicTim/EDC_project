@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     algorithm: str
     access_token_expire_minutes: int
     reports_dir: str
+    java_api_url: str
 
     class Config:
         env_file = os.path.join(os.path.dirname(__file__), '../.env')
