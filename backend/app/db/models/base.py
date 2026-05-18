@@ -10,7 +10,7 @@ from app.utils.time import current_datetime
 
 
 class BaseSQLModel(Base):
-    __abstract__ = True  # This makes the class abstract and prevents it from being instantiated directly
+    __abstract__ = True
 
     Id = Column(UUID(), primary_key=True, index=True)
     DateCreated = Column(DateTime, nullable=False)

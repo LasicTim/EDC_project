@@ -20,7 +20,7 @@ router = APIRouter(
     tags=["users"],
 )
 
-@router.post("/create_user", response_model=users.UserCreate)
+@router.post("/create_user", response_model=users.UserNormalResponse)
 def create_user(user: users.GetUser, db: Session = Depends(get_db)) -> UserModel:
     query = Select(
         UserModel.username,
@@ -34,7 +34,7 @@ def create_user(user: users.GetUser, db: Session = Depends(get_db)) -> UserModel
     user_created = SqlInsert(db, user_model)
     return user_created
 
-@router.post("/create_worker", response_model=users.UserCreate)
+@router.post("/create_worker", response_model=users.UserNormalResponse)
 def create_worker(user: users.WorkerCreate,
                   db: Session = Depends(get_db),
                   current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
@@ -70,7 +70,7 @@ def create_worker(user: users.WorkerCreate,
 
 
 @router.post("/get_user", response_model=list[users.GetUser])
-def get_user(user: users.UserCreate,
+def get_user(user: users.UserNormalResponse,
              db: Session = Depends(get_db),
              current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
     query = Select(
@@ -83,9 +83,9 @@ def get_user(user: users.UserCreate,
     return user_found
 
 @router.post("/get_user_with_company", response_model=list[users.GeUserWithCompanyData])
-def get_user_with_company(user: users.UserCreate,
-             db: Session = Depends(get_db),
-             current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
+def get_user_with_company(user: users.UserNormalResponse,
+                          db: Session = Depends(get_db),
+                          current_user: UserModel = Depends(Authenticate.get_current_user)) -> UserModel:
     query = (Select(
         UserModel.username,
         UserModel.email,

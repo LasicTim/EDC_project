@@ -31,7 +31,7 @@ class UserBase(BaseSchema):
     vacation_criteria: Optional[VacationCriteria] = None
 
 
-class UserCreate(BaseModel):
+class UserNormalResponse(BaseModel):
     username: str
     IdCompany: Optional[str] = None
 
