@@ -25,6 +25,7 @@ import { Checkbox } from 'primereact/checkbox';
 
 const CustomTemplateEditView: React.FC = () => {
     const [customTemplateData, setCustomTemplateData] = useState<CustomTemplate | null>(null);
+    const [editorInitialValue, setEditorInitialValue] = useState<string>("");
     const [loading, setLoading] = useState(true);
     const [content, setContent] = useState<string>('');
     const [error, setError] = useState('');
@@ -92,6 +93,12 @@ const CustomTemplateEditView: React.FC = () => {
 
         }
     };
+
+    useEffect(() => {
+        if (customTemplateData?.content && editorInitialValue === "") {
+            setEditorInitialValue(customTemplateData.content);
+        }
+    }, [customTemplateData?.content, editorInitialValue]);
 
     useEffect(() => {
         // If the user is not available in the context, we just return
@@ -173,12 +180,14 @@ const CustomTemplateEditView: React.FC = () => {
 
                             <div className='input-lg'>
                                 <label htmlFor="content">Vsebina</label>
+                                {editorInitialValue != "" && (
                                 <TinyMCEEditor
-                                    initialValue={customTemplateData?.content ?? ''}
+                                    initialValue={editorInitialValue}
                                     onEditorChange={(newContent) => setCustomTemplateData((prev) =>
                                         prev ? { ...prev, content: newContent } : { content: newContent } as CustomTemplate
                                     )}
                                 />
+                                )}
                             </div>
                             
                             
