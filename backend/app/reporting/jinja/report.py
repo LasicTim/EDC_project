@@ -11,8 +11,8 @@ from app.reporting.jinja.utils import get_jinja_environment
 
 
 class Report:
-    def __init__(self, input_file_name, output_file_name, output_format):
-        self.input_file_name = input_file_name
+    def __init__(self, input_file_path, output_file_name, output_format):
+        self.input_file_path = input_file_path
         self.output_format = output_format.lower()
 
         # Generate timestamp
@@ -28,7 +28,7 @@ class Report:
 
         if self.output_format in ["pdf", "html"]:
             # Read input file
-            with open(self.input_file_name, "r", encoding="utf-8") as f:
+            with open(self.input_file_path, "r", encoding="utf-8") as f:
                 file_content = f.read()
 
             # Parse HTML with BeautifulSoup
