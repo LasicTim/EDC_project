@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,14 +44,22 @@ import java.util.logging.Logger;
 public class JasperReportServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(JasperReportServlet.class.getName());
 
+    private long usedMemory() {
+        Runtime runtime = Runtime.getRuntime();
+        return runtime.totalMemory() - runtime.freeMemory();
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
         resp.setContentType("application/json");
         PrintWriter out = resp.getWriter();
+        Map<String, Object> metrics = new LinkedHashMap<>();
 
         try {
+            long startTime = System.nanoTime();
+            long startMemory = usedMemory();
             // Read request body
             StringBuilder sb = new StringBuilder();
             BufferedReader reader = req.getReader();
@@ -75,10 +84,6 @@ public class JasperReportServlet extends HttpServlet {
 
             InputStream jsonStream = new ByteArrayInputStream(dataJson.getBytes("UTF-8"));
 
-            logger.info("Template file: " + templateFile);
-            logger.info("Output file: " + outputFile);
-            logger.info("JSON data length: " + dataJson.length());
-
             File template = new File(templateFile);
             if (!template.exists()) {
                 logger.severe("JRXML template file not found: " + templateFile);
@@ -90,6 +95,8 @@ public class JasperReportServlet extends HttpServlet {
             }
 
             // Compile template
+            long compileStart = System.nanoTime();
+            long compileMemoryStart = usedMemory();
             JasperReport jasperReport = null;
             logger.info("Compiling JRXML template: " + templateFile);
             try {
@@ -110,16 +117,25 @@ public class JasperReportServlet extends HttpServlet {
             } finally {
                 jsonStream.close();
             }
+            long compileEnd = System.nanoTime();
+            long compileMemoryEnd = usedMemory();
+            metrics.put("compile_time_ms", (compileEnd - compileStart) / 1_000_000);
+            metrics.put("compile_memory_used_bytes", compileMemoryEnd - compileMemoryStart);
 
             // Create JSON data source (pointing to the "root" array)
+            long fillStart = System.nanoTime();
+            long fillMemoryStart = usedMemory();
             JsonDataSource dataSource = new JsonDataSource(jsonStream, "root");
-            logger.info("Data source created");
 
             // Fill report
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
-            logger.info("Filling done");
-
+            long fillEnd = System.nanoTime();
+            long fillMemoryEnd = usedMemory();
+            metrics.put("fill_time_ms", (fillEnd - fillStart) / 1_000_000);
+            metrics.put("fill_memory_used_bytes", fillMemoryEnd - fillMemoryStart);
             // Export to PDF
+            long exportStart = System.nanoTime();
+            long exportMemoryStart = usedMemory();
             JRPdfExporter exporter = new JRPdfExporter();
             exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
             exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputFile));
@@ -127,12 +143,18 @@ public class JasperReportServlet extends HttpServlet {
             SimplePdfExporterConfiguration configuration = new SimplePdfExporterConfiguration();
             exporter.setConfiguration(configuration);
             exporter.exportReport();
-            logger.info("Report generated successfully: " + outputFile);
+            long exportEnd = System.nanoTime();
+            long exportMemoryEnd = usedMemory();
+            metrics.put("export_time_ms", (exportEnd - exportStart) / 1_000_000);
+            metrics.put("export_memory_used_bytes", exportMemoryEnd - exportMemoryStart);
 
             jsonStream.close();
-
+            long endTime = System.nanoTime();
+            long endMemory = usedMemory();
+            metrics.put("execution_time_ms", (endTime - startTime) / 1_000_000);
+            metrics.put("memory_used_bytes", endMemory - startMemory);
             // Write success response
-            out.write("{\"status\":\"success\",\"message\":\"Report generated successfully\"}");
+            out.write("{\"status\":\"success\",\"message\":\"Report generated successfully\", \"metrics\":" + mapper.writeValueAsString(metrics) + "}");
 
         } catch (Exception e) {
             logger.severe("Exception message: " + e.getMessage());

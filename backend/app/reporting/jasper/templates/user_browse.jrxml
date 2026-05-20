@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.1.final using JasperReports Library version 6.2.1  -->
-<!-- 2026-05-18T13:46:12 -->
+<!-- 2026-05-20T11:56:40 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SimpleReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="12345678-1234-1234-1234-123456789012">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="edc_json_adapter"/>
 	<queryString language="JSON">
@@ -35,7 +35,7 @@
 	<columnHeader>
 		<band height="20">
 			<staticText>
-				<reportElement x="0" y="0" width="277" height="20" uuid="bf1fd2f1-f451-4277-ba04-5636c83d1f89"/>
+				<reportElement x="340" y="0" width="105" height="20" uuid="bf1fd2f1-f451-4277-ba04-5636c83d1f89"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -49,7 +49,7 @@
 				<text><![CDATA[Ime]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="277" y="0" width="278" height="20" uuid="4aa10f99-577f-4336-bbd7-2f7838602f2d"/>
+				<reportElement x="445" y="0" width="106" height="20" uuid="4aa10f99-577f-4336-bbd7-2f7838602f2d"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -62,12 +62,54 @@
 				</textElement>
 				<text><![CDATA[Priimek]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="130" height="20" uuid="6fec522a-63ce-434a-a91d-846cc24400c0"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" pdfEncoding="Cp1250"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="0" width="105" height="20" uuid="c4aad57b-08f0-42eb-8516-a73c72f494ba"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" pdfEncoding="Cp1250"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Uporabniško ime]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="235" y="0" width="105" height="20" uuid="dcf5f29b-2e19-4f1b-adcf-316667dd2cc9"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" pdfEncoding="Cp1250"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Email]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20">
 			<textField>
-				<reportElement x="0" y="0" width="277" height="20" uuid="1f4dae32-d951-41d6-8a75-cdf01c0e89fd"/>
+				<reportElement x="340" y="0" width="105" height="20" uuid="1f4dae32-d951-41d6-8a75-cdf01c0e89fd"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -81,7 +123,7 @@
 				<textFieldExpression><![CDATA[$F{first_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="277" y="0" width="278" height="20" uuid="fbc88eb8-74eb-49fc-9a06-e0a8fac8854f"/>
+				<reportElement x="445" y="0" width="106" height="20" uuid="fbc88eb8-74eb-49fc-9a06-e0a8fac8854f"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -93,6 +135,48 @@
 					<paragraph leftIndent="5" spacingBefore="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{last_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="130" height="20" uuid="cf5a268a-330a-4b86-952f-3e24777ecb71"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Sans" size="12" pdfEncoding="Cp1250"/>
+					<paragraph leftIndent="5" spacingBefore="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="0" width="105" height="20" uuid="9b19789c-b82b-4e8f-8d32-cd61bb5b7eeb"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Sans" size="12" pdfEncoding="Cp1250"/>
+					<paragraph leftIndent="5" spacingBefore="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="235" y="0" width="105" height="20" uuid="a327e2df-9a33-4365-b9d6-5125301f49c4"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Sans" size="12" pdfEncoding="Cp1250"/>
+					<paragraph leftIndent="5" spacingBefore="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

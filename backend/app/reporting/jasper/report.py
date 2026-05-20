@@ -46,6 +46,14 @@ class Report_Jasper:
 
             resp_json = response.json()
             if resp_json.get("status") == "success":
+                metrics = resp_json.get("metrics", {})
+
+                print("\n--- JAVA PERFORMANCE METRICS ---")
+
+                for key, value in metrics.items():
+                    print(f"{key}: {value}")
+
+                print("--------------------------------\n")
                 self.url = f"{BACKEND_URL}/{self.output_file_name}"
                 return True, "Report generated successfully"
             else:
