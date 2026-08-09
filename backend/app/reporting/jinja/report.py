@@ -11,6 +11,8 @@ import pdfkit
 from app.constants import BACKEND_URL
 from app.core.config import settings
 from app.reporting.jinja.utils import get_jinja_environment
+from app.reporting.jinja import jinja_measure
+from app.reporting.jinja.metrics import RenderMetrics, _null_tracemalloc_session
 
 
 class Report:
@@ -71,8 +73,9 @@ class Report:
         self.url = f"{BACKEND_URL}/{self.output_file_name}"
 
 class Report_V2:
-    def __init__(self, template_name, output_file_name, output_format):
+    def __init__(self, template_name, output_file_name, output_format, measure_memory: bool = True):
         self.output_format = output_format.lower()
+        self.measure_memory = measure_memory
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         base_name = os.path.splitext(output_file_name)[0]
         self.output_file_name = os.path.join(
@@ -87,6 +90,7 @@ class Report_V2:
         # use of environment
         env = get_jinja_environment()
         self.template = env.get_template(template_name)
+        self.last_metrics = None
 
     @staticmethod
     def _ensure_extension(file_name, output_format):
@@ -96,56 +100,41 @@ class Report_V2:
             file_name += ext
         return file_name
 
-    @staticmethod
-    def used_memory():
-        process = psutil.Process(os.getpid())
-        return process.memory_info().rss
+    def render(self, context: dict, verbose: bool = True) -> "RenderMetrics":
+        metrics = RenderMetrics(enabled=self.measure_memory)
 
-    def render(self, context: dict):
-        start_time = time.perf_counter()
-        start_mem = self.used_memory()
-        # FILL
-        start_fill_time = time.perf_counter()
-        start_fill_mem = self.used_memory()
-        rendered_content = self.template.render(context)
-        end_fill_time = time.perf_counter()
-        end_fill_mem = self.used_memory()
+        with metrics.phase("total", gc_collect=True) as total:
+            # FILL
+            with metrics.phase("fill", use_tracemalloc=True) as fill:
+                rendered_content = self.template.render(context)
+                if self.measure_memory:
+                    fill.extra["rendered_content_bytes"] = len(rendered_content.encode("utf-8"))
 
-        fill_time_ms = (end_fill_time - start_fill_time) * 1000
-        fill_memory_used = end_fill_mem - start_fill_mem
-        # EXPORT
-        start_export_time = time.perf_counter()
-        start_export_mem = self.used_memory()
-        if self.output_format == "html":
-            with open(self.output_file_name, "w", encoding="utf-8") as f:
-                f.write(rendered_content)
-        elif self.output_format == "pdf":
-            pdfkit.from_string(rendered_content, self.output_file_name)
+            # EXPORT
+            with metrics.phase("export") as export:
+                if self.output_format == "html":
+                    with open(self.output_file_name, "w", encoding="utf-8") as f:
+                        f.write(rendered_content)
+                else:
+                    child_monitor = jinja_measure.ChildProcessMonitor() if self.measure_memory else None
+                    if child_monitor:
+                        child_monitor.start()
+                    try:
+                        pdfkit.from_string(rendered_content, self.output_file_name)
+                    finally:
+                        if child_monitor:
+                            child_monitor.stop()
+                            child_peak = child_monitor.get_peak()
+                            export.memory_used_bytes += child_peak
+                            export.extra["child_process_peak_bytes"] = child_peak
 
-        end_export_time = time.perf_counter()
-        end_export_mem = self.used_memory()
+            # The child PDF process's memory never shows up in this
+            # process's own RSS diff, so fold it in explicitly —
+            # otherwise "total" understates the real memory cost.
+            total.memory_used_bytes += export.extra.get("child_process_peak_bytes", 0)
 
-        export_time_ms = (end_export_time - start_export_time) * 1000
-        export_memory_used = end_export_mem - start_export_mem
-
-        # TOTAL
-        end_time = time.perf_counter()
-        end_mem = self.used_memory()
-
-        total_time_ms = (end_time - start_time) * 1000
-        total_memory_used = end_mem - start_mem
-
-        print("\n--- Jinja2 PERFORMANCE METRICS ---")
-
-        print(f"fill_time_ms: {fill_time_ms:.2f}")
-        print(f"fill_memory_used_bytes: {fill_memory_used}")
-
-        print(f"export_time_ms: {export_time_ms:.2f}")
-        print(f"export_memory_used_bytes: {export_memory_used}")
-
-        print(f"total_time_ms: {total_time_ms:.2f}")
-        print(f"total_memory_used_bytes: {total_memory_used}")
-
-        print("-----------------------------------")
-
+        if verbose:
+            metrics.print_summary()
+        self.last_metrics = metrics
         self.url = f"{BACKEND_URL}/{self.output_file_name}"
+        return metrics

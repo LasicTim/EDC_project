@@ -4,6 +4,8 @@ import ujson
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+import json
+
 
 from app.api.schemas import companies
 from app.constants import GENERATED_REPORTS_DIR, BACKEND_URL
@@ -14,8 +16,9 @@ from app.db.models.models import UserModel
 from app.reporting.jasper.report import Report_Jasper
 from app.reporting.jasper.utils import get_jasper_template_path
 from app.reporting.jinja.report import Report, Report_V2
-from app.reporting.jinja.utils import get_jinja_template_path
+from app.reporting.jinja.utils import get_jinja_template_path, report_stats_to_json_rows, get_jinja_stat_path
 from app.utils.company_utils import get_company_workers
+from app.reporting.jinja.summarize import summarize_by_multiplier, print_summary
 
 router = APIRouter(
     prefix="/reports",
@@ -53,10 +56,30 @@ def create_user_reports_v2(company: companies.GetCompany, db: Session = Depends(
         template_name = "user_browse.html"
         out_file_name = 'Izpis_delavcev'
         out_file_format = 'pdf'
+        report_stats = []
+        data_multipliers = [1] # this multiplies data [2,20,200,2000]
+        runs = 1 # 10
+        report = None
+        for multiplier in data_multipliers:
+            for run in range(runs):
+                workers = all_workers * multiplier
+                report = Report_V2(template_name, out_file_name, out_file_format)
+                metrics = report.render({"users": workers }, verbose=False)
+                report_stats.append({
+                    "run": run,
+                    "multiplier": multiplier,
+                    "worker_count": len(workers),
+                    "metrics": metrics,
+                })
 
-        report = Report_V2(template_name, out_file_name, out_file_format)
-        report.render({"users": all_workers})
+        summary = summarize_by_multiplier(report_stats)
+        print_summary(summary)
 
+        output_path = get_jinja_stat_path("report_benchmark.json")
+
+
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(report_stats_to_json_rows(report_stats), f, indent=4)
         return JSONResponse(content={"status": "success", "url": report.url})
 
     except Exception as e:

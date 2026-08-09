@@ -1,0 +1,33 @@
+[
+    {
+        "run": 0,
+        "multiplier": 1,
+        "worker_count": 5,
+        "phases": [
+            {
+                "name": "fill",
+                "time_ms": 3.1245999998645857,
+                "memory_used_bytes": 49152,
+                "extra": {
+                    "rendered_content_bytes": 1734,
+                    "tracemalloc_current_bytes": 4367,
+                    "tracemalloc_peak_bytes": 9244
+                }
+            },
+            {
+                "name": "export",
+                "time_ms": 520.3682000010303,
+                "memory_used_bytes": 37187584,
+                "extra": {
+                    "child_process_peak_bytes": 37015552
+                }
+            },
+            {
+                "name": "total",
+                "time_ms": 576.3535000005504,
+                "memory_used_bytes": 37240832,
+                "extra": {}
+            }
+        ]
+    }
+]

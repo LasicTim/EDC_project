@@ -9,7 +9,13 @@ import requests
 
 
 class Report_Jasper:
-    def __init__(self, template_file_path: str, output_file_name: str, output_format: str, data: List[Dict[str, Any]]) -> None:
+    def __init__(
+            self,
+            template_file_path: str,
+            output_file_name: str,
+            output_format: str,
+            data: List[Dict[str, Any]]
+    ) -> None:
         self.template_file_path = template_file_path
         self.output_format = output_format
         self.data = data

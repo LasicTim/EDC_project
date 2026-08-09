@@ -27,10 +27,16 @@ def create_user(user: users.GetUser, db: Session = Depends(get_db)) -> UserModel
         UserModel.hashed_password
     ).where(and_(UserModel.username == user.username, UserModel.Active == True))
     existing_user = SqlExe(db, query)
-    if existing_user or not is_valid_email(user.email) or not is_valid_password(user.password):  # This means at least one user was found
+    # This means at least one user was found
+    if existing_user or not is_valid_email(user.email) or not is_valid_password(user.password):
         raise_exception(status_code=400, detail="User already exists")
 
-    user_model = UserModel(username=user.username, email=user.email, hashed_password=hash_password(user.password), is_superuser=True)
+    user_model = UserModel(
+        username=user.username,
+        email=user.email,
+        hashed_password=hash_password(user.password),
+        is_superuser=True
+    )
     user_created = SqlInsert(db, user_model)
     return user_created
 
