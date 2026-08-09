@@ -12,7 +12,7 @@ from app.constants import BACKEND_URL
 from app.core.config import settings
 from app.reporting.jinja.utils import get_jinja_environment
 from app.reporting.jinja import jinja_measure
-from app.reporting.jinja.metrics import RenderMetrics, _null_tracemalloc_session
+from app.reporting.metrics import RenderMetrics
 
 
 class Report:
@@ -134,7 +134,7 @@ class Report_V2:
             total.memory_used_bytes += export.extra.get("child_process_peak_bytes", 0)
 
         if verbose:
-            metrics.print_summary()
+            metrics.print_summary("\n--- Jinja2 PERFORMANCE METRICS ---")
         self.last_metrics = metrics
         self.url = f"{BACKEND_URL}/{self.output_file_name}"
         return metrics

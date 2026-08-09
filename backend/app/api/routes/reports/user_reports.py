@@ -18,7 +18,7 @@ from app.reporting.jasper.utils import get_jasper_template_path
 from app.reporting.jinja.report import Report, Report_V2
 from app.reporting.jinja.utils import get_jinja_template_path, report_stats_to_json_rows, get_jinja_stat_path
 from app.utils.company_utils import get_company_workers
-from app.reporting.jinja.summarize import summarize_by_multiplier, print_summary
+from app.reporting.metrics import summarize_by_multiplier, print_summary
 
 router = APIRouter(
     prefix="/reports",
@@ -57,8 +57,8 @@ def create_user_reports_v2(company: companies.GetCompany, db: Session = Depends(
         out_file_name = 'Izpis_delavcev'
         out_file_format = 'pdf'
         report_stats = []
-        data_multipliers = [1] # this multiplies data [2,20,200,2000]
-        runs = 1 # 10
+        data_multipliers = [2, 20, 200, 2000] # this multiplies data [2,20,200,2000]
+        runs = 10 # 10
         report = None
         for multiplier in data_multipliers:
             for run in range(runs):
@@ -94,10 +94,29 @@ def create_user_reports_jasper(company: companies.GetCompany, db: Session = Depe
         template_name = get_jasper_template_path("user_browse.jrxml")
         out_file_name = 'Izpis_delavcev'
         out_file_format = 'pdf'
-        json_data = all_workers
 
-        report = Report_Jasper(template_name, out_file_name, out_file_format, json_data)
-        status, msg = report.generate()
+        report_stats = []
+        data_multipliers = [2 ,20 ,200, 2000]  # this multiplies data [2,20,200,2000]
+        runs = 10  # 10
+        report = None
+        status = False
+        msg = ''
+        for multiplier in data_multipliers:
+            for run in range(runs):
+                workers = all_workers * multiplier
+                report = Report_Jasper(template_name, out_file_name, out_file_format, workers)
+                status, msg, metrics = report.generate(verbose=False)
+                if not status:
+                    continue
+                report_stats.append({
+                    "run": run,
+                    "multiplier": multiplier,
+                    "worker_count": len(workers),
+                    "metrics": metrics,
+                })
+
+        summary = summarize_by_multiplier(report_stats)
+        print_summary(summary)
 
         if status:
             return JSONResponse(content={"status": "success", "url": report.url})

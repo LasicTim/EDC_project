@@ -1,11 +1,12 @@
 import os
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import Any, Dict, List, Optional, Tuple
+
+import requests
 
 from app.constants import GENERATED_REPORTS_DIR, BACKEND_URL
 from app.core.config import settings
-import requests
-
+from app.reporting.metrics import RenderMetrics
 
 
 class Report_Jasper:
@@ -27,43 +28,39 @@ class Report_Jasper:
         self.output_file_path = os.path.join(
             GENERATED_REPORTS_DIR, f"{base_name}_jasper_{timestamp}.{output_format}"
         )
-        self.url = ''
+        self.url = ""
+        self.last_metrics: Optional[RenderMetrics] = None
 
         if self.output_format not in ["pdf", "html"]:
             raise ValueError(f"Unsupported output format: {self.output_format}")
 
-
-    def generate(self):
-        """
-        Sends request to Java API and generates the report.
-        Returns: (status: bool, message: str)
+    def generate(self, verbose: bool = True) -> Tuple[bool, str, Optional[RenderMetrics]]:
+        """Sends request to Java API and generates the report.
+        Returns: (status, message, metrics) — metrics is None on failure.
         """
         try:
             payload = {
                 "template_file": self.template_file_path,
                 "output_file": self.output_file_path,
-                "data": {
-                    "root": self.data
-                }
+                "data": {"root": self.data},
             }
 
             response = requests.post(settings.java_api_url, json=payload, timeout=30)
             response.raise_for_status()
-
             resp_json = response.json()
-            if resp_json.get("status") == "success":
-                metrics = resp_json.get("metrics", {})
 
-                print("\n--- JAVA PERFORMANCE METRICS ---")
+            if resp_json.get("status") != "success":
+                return False, resp_json.get("message", "Unknown error from Java API"), None
 
-                for key, value in metrics.items():
-                    print(f"{key}: {value}")
+            phases_json = resp_json.get("metrics", {}).get("phases", [])
+            metrics = RenderMetrics.from_json_phases(phases_json)
+            self.last_metrics = metrics
 
-                print("--------------------------------\n")
-                self.url = f"{BACKEND_URL}/{self.output_file_name}"
-                return True, "Report generated successfully"
-            else:
-                return False, resp_json.get("message", "Unknown error from Java API")
+            if verbose:
+                metrics.print_summary(title="Jasper PERFORMANCE METRICS")
+
+            self.url = f"{BACKEND_URL}/{self.output_file_name}"
+            return True, "Report generated successfully", metrics
 
         except requests.RequestException as e:
-            return False, f"Request to Java API failed: {str(e)}"
+            return False, f"Request to Java API failed: {str(e)}", None

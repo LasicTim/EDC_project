@@ -88,7 +88,7 @@ const UserBrowseView: React.FC = () => {
                 IdUser: user?.Id,
             };
 
-                
+            //create_user_reports_v2 for jinja report, create_user_reports_jasper for jasper
             const response = await api.post('/reports/create_user_reports_v2', companydata, {
                 headers: {
                     'Content-Type': 'application/json'
