@@ -126,12 +126,8 @@ class Report_V2:
                             child_monitor.stop()
                             child_peak = child_monitor.get_peak()
                             export.memory_used_bytes += child_peak
+                            export.peak_memory_used_bytes += child_peak
                             export.extra["child_process_peak_bytes"] = child_peak
-
-            # The child PDF process's memory never shows up in this
-            # process's own RSS diff, so fold it in explicitly —
-            # otherwise "total" understates the real memory cost.
-            total.memory_used_bytes += export.extra.get("child_process_peak_bytes", 0)
 
         if verbose:
             metrics.print_summary("\n--- Jinja2 PERFORMANCE METRICS ---")

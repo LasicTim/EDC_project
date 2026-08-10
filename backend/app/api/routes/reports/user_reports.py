@@ -57,7 +57,7 @@ def create_user_reports_v2(company: companies.GetCompany, db: Session = Depends(
         out_file_name = 'Izpis_delavcev'
         out_file_format = 'pdf'
         report_stats = []
-        data_multipliers = [2, 20, 200, 2000] # this multiplies data [2,20,200,2000]
+        data_multipliers = [5000] # this multiplies data [2,20,200,2000]
         runs = 10 # 10
         report = None
         for multiplier in data_multipliers:
@@ -96,7 +96,7 @@ def create_user_reports_jasper(company: companies.GetCompany, db: Session = Depe
         out_file_format = 'pdf'
 
         report_stats = []
-        data_multipliers = [2 ,20 ,200, 2000]  # this multiplies data [2,20,200,2000]
+        data_multipliers = [2,20,200,2000,15000]  # this multiplies data [2,20,200,2000] ## 100000 dobimo blank
         runs = 10  # 10
         report = None
         status = False
