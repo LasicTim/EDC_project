@@ -70,32 +70,25 @@ class RenderMetrics:
                 yield stats
             finally:
                 stop_event.set()
-
                 if monitor_thread:
                     monitor_thread.join()
-
                 stats.time_ms = (time.perf_counter() - start_time) * 1000
-
                 if self.enabled:
                     end_rss = jinja_measure.sample_rss(
                         gc_collect=gc_collect,
                         settle_time=settle
                     )
-
                     stats.memory_used_bytes = end_rss - start_rss
                     stats.peak_memory_used_bytes = peak_rss - start_rss
-
                     if use_tracemalloc:
                         current, peak = get_traced()
                         stats.extra["tracemalloc_current_bytes"] = current
                         stats.extra["tracemalloc_peak_bytes"] = peak
-
                         # Use the larger of RSS peak and Python allocation peak.
                         stats.peak_memory_used_bytes = max(
                             stats.peak_memory_used_bytes,
                             peak
                         )
-
                 self.phases.append(stats)
 
     @classmethod

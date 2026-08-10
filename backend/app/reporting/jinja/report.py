@@ -103,7 +103,7 @@ class Report_V2:
     def render(self, context: dict, verbose: bool = True) -> "RenderMetrics":
         metrics = RenderMetrics(enabled=self.measure_memory)
 
-        with metrics.phase("total", gc_collect=True) as total:
+        with metrics.phase("total", gc_collect=True, use_tracemalloc=True) as total:
             # FILL
             with metrics.phase("fill", use_tracemalloc=True) as fill:
                 rendered_content = self.template.render(context)

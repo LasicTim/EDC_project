@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 import json
-
+import datetime
 
 from app.api.schemas import companies
 from app.constants import GENERATED_REPORTS_DIR, BACKEND_URL
@@ -17,7 +17,7 @@ from app.reporting.jasper.report import Report_Jasper
 from app.reporting.jasper.utils import get_jasper_template_path
 from app.reporting.jinja.report import Report, Report_V2
 from app.reporting.jinja.utils import get_jinja_template_path, report_stats_to_json_rows, get_jinja_stat_path
-from app.utils.company_utils import get_company_workers
+from app.utils.company_utils import get_company_workers, get_company_report_data
 from app.reporting.metrics import summarize_by_multiplier, print_summary
 
 router = APIRouter(
@@ -57,7 +57,7 @@ def create_user_reports_v2(company: companies.GetCompany, db: Session = Depends(
         out_file_name = 'Izpis_delavcev'
         out_file_format = 'pdf'
         report_stats = []
-        data_multipliers = [5000] # this multiplies data [2,20,200,2000]
+        data_multipliers = [2,20,200,2000]#15000 # this multiplies data [2,20,200,2000]
         runs = 10 # 10
         report = None
         for multiplier in data_multipliers:
@@ -85,6 +85,24 @@ def create_user_reports_v2(company: companies.GetCompany, db: Session = Depends(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Report generation failed: {str(e)}")
 
+@router.post("/create_company_report_jinja")
+def create_company_report_jinja(company: companies.GetCompany, db: Session = Depends(get_db)):
+    try:
+
+        all_data = get_company_report_data(company.IdUser, db)
+
+        template_name = "company_report.html"
+        out_file_name = 'Izpis_podjetja'
+        out_file_format = 'pdf'
+        report = Report_V2(template_name, out_file_name, out_file_format)
+        report_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        report.render({"companies": [all_data], "report_date": report_date }, verbose=False)
+
+        return JSONResponse(content={"status": "success", "url": report.url})
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Report generation failed: {str(e)}")
+
 @router.post("/create_user_reports_jasper")
 def create_user_reports_jasper(company: companies.GetCompany, db: Session = Depends(get_db)):
     try:
@@ -96,7 +114,7 @@ def create_user_reports_jasper(company: companies.GetCompany, db: Session = Depe
         out_file_format = 'pdf'
 
         report_stats = []
-        data_multipliers = [2,20,200,2000,15000]  # this multiplies data [2,20,200,2000] ## 100000 dobimo blank
+        data_multipliers = [2,20,200,2000]#15000  # this multiplies data [2,20,200,2000] ## 100000 dobimo blank
         runs = 10  # 10
         report = None
         status = False
@@ -118,6 +136,28 @@ def create_user_reports_jasper(company: companies.GetCompany, db: Session = Depe
         summary = summarize_by_multiplier(report_stats)
         print_summary(summary)
 
+        if status:
+            return JSONResponse(content={"status": "success", "url": report.url})
+        else:
+            return JSONResponse(content={"status": "error", "message": msg})
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Report generation failed: {str(e)}")
+
+
+
+@router.post("/create_company_report_jasper")
+def create_company_report_jasper(company: companies.GetCompany, db: Session = Depends(get_db)):
+    try:
+
+        all_data = get_company_report_data(company.IdUser, db)
+
+        template_name = get_jasper_template_path("company_report.jrxml")
+        out_file_name = 'Izpis_podjetja'
+        out_file_format = 'pdf'
+
+        report = Report_Jasper(template_name, out_file_name, out_file_format, all_data)
+        status, msg, metrics = report.generate(verbose=False)
         if status:
             return JSONResponse(content={"status": "success", "url": report.url})
         else:

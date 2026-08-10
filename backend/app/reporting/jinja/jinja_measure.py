@@ -33,8 +33,7 @@ def sample_rss(gc_collect: bool = False, settle_time: float = 0.0) -> int:
 def tracemalloc_session() -> Iterator[Callable[[], tuple[int, int]]]:
     """Context manager wrapping a single tracemalloc run.
 
-    Yields a zero-arg callable that returns the (current, peak) bytes traced
-    so far. Used for small phases like "fill"
+    Used for small phases like "fill"
     """
     tracemalloc.start()
     try:

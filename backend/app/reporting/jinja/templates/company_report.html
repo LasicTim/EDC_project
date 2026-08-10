@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="sl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Poročilo o podjetjih in uporabnikih</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #222;
+            margin: 30px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #999;
+            padding-bottom: 5px;
+        }
+
+        .report-info {
+            margin-bottom: 25px;
+            color: #666;
+        }
+
+        .company-info {
+            margin-bottom: 15px;
+        }
+
+        .company-info p {
+            margin: 3px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eee;
+            font-weight: bold;
+        }
+
+        .no-users {
+            color: #777;
+            font-style: italic;
+            margin: 10px 0;
+        }
+
+        .summary {
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px solid #999;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Poročilo o podjetjih in uporabnikih</h1>
+
+    <div class="report-info">
+        <p>Datum izdelave: {{ report_date }}</p>
+        <p>Število podjetij: {{ companies|length }}</p>
+    </div>
+
+    {% for company in companies %}
+
+    <h2>{{ company.name }}</h2>
+
+    <div class="company-info">
+        <p><strong>E-pošta:</strong> {{ company.email }}</p>
+        <p><strong>Telefon:</strong> {{ company.phone_number or '-' }}</p>
+        <p><strong>Naslov:</strong> {{ company.address or '-' }}</p>
+        <p><strong>Mesto:</strong> {{ company.city or '-' }}</p>
+        <p><strong>Država:</strong> {{ company.country or '-' }}</p>
+        <p><strong>Poštna številka:</strong> {{ company.postal_code or '-' }}</p>
+    </div>
+
+    <h3>Uporabniki</h3>
+
+    {% if company.users %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Uporabniško ime</th>
+                <th>Ime</th>
+                <th>Priimek</th>
+                <th>E-pošta</th>
+                <th>Telefon</th>
+                <th>Mesto</th>
+                <th>Država</th>
+                <th>Datum rojstva</th>
+                <th>Skrbnik</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for user in company.users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.first_name or '-' }}</td>
+                <td>{{ user.last_name or '-' }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone_number or '-' }}</td>
+                <td>{{ user.city or '-' }}</td>
+                <td>{{ user.country or '-' }}</td>
+                <td>
+                    {% if user.birth_date %}
+                    {{ user.birth_date }}
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if user.is_superuser %}
+                    Da
+                    {% else %}
+                    Ne
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+
+    <p class="no-users">Podjetje nima registriranih uporabnikov.</p>
+
+    {% endif %}
+
+    <div class="summary">
+        <strong>Število uporabnikov:</strong> {{ company.users|length }}
+    </div>
+
+    {% if not loop.last %}
+    <div class="page-break"></div>
+    {% endif %}
+
+    {% endfor %}
+
+</body>
+
+</html>
