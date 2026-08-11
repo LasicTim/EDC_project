@@ -1,371 +1,321 @@
 [
     {
         "run": 0,
-        "multiplier": 200,
-        "worker_count": 1000,
+        "multiplier": 15000,
+        "worker_count": 75000,
         "phases": [
             {
                 "name": "fill",
-                "time_ms": 736.4909000002626,
-                "memory_used_bytes": 2023424,
-                "peak_memory_used_bytes": 1888256,
+                "time_ms": 9575.248700000884,
+                "memory_used_bytes": 50520064,
+                "peak_memory_used_bytes": 51326976,
                 "extra": {
-                    "rendered_content_bytes": 248561,
-                    "tracemalloc_current_bytes": 605940,
-                    "tracemalloc_peak_bytes": 1350481
+                    "rendered_content_bytes": 18570961
                 }
             },
             {
                 "name": "export",
-                "time_ms": 868.4955999997328,
-                "memory_used_bytes": 0,
-                "peak_memory_used_bytes": 49221632,
+                "time_ms": 349694.0214999995,
+                "memory_used_bytes": -913408,
+                "peak_memory_used_bytes": 772726784,
                 "extra": {
-                    "child_process_peak_bytes": 49221632
+                    "child_process_peak_bytes": 772726784
                 }
             },
             {
                 "name": "total",
-                "time_ms": 34834.90849999998,
-                "memory_used_bytes": 1994752,
-                "peak_memory_used_bytes": 49221632,
-                "extra": {
-                    "tracemalloc_current_bytes": 0,
-                    "tracemalloc_peak_bytes": 0
-                }
+                "time_ms": 359326.6937999997,
+                "memory_used_bytes": 49606656,
+                "peak_memory_used_bytes": 772726784,
+                "extra": {}
             }
         ]
     },
     {
         "run": 1,
-        "multiplier": 200,
-        "worker_count": 1000,
+        "multiplier": 15000,
+        "worker_count": 75000,
         "phases": [
             {
                 "name": "fill",
-                "time_ms": 670.4272000001765,
-                "memory_used_bytes": 1622016,
-                "peak_memory_used_bytes": 1260616,
+                "time_ms": 12607.681600000433,
+                "memory_used_bytes": 47161344,
+                "peak_memory_used_bytes": 47968256,
                 "extra": {
-                    "rendered_content_bytes": 248561,
-                    "tracemalloc_current_bytes": 514027,
-                    "tracemalloc_peak_bytes": 1260616
+                    "rendered_content_bytes": 18570961
                 }
             },
             {
                 "name": "export",
-                "time_ms": 925.8601000001363,
-                "memory_used_bytes": 0,
-                "peak_memory_used_bytes": 48889856,
+                "time_ms": 369611.80780000176,
+                "memory_used_bytes": -2134016,
+                "peak_memory_used_bytes": 785428480,
                 "extra": {
-                    "child_process_peak_bytes": 48889856
+                    "child_process_peak_bytes": 785428480
                 }
             },
             {
                 "name": "total",
-                "time_ms": 10367.309100000057,
-                "memory_used_bytes": 1626112,
-                "peak_memory_used_bytes": 48889856,
-                "extra": {
-                    "tracemalloc_current_bytes": 0,
-                    "tracemalloc_peak_bytes": 0
-                }
+                "time_ms": 382283.5170999988,
+                "memory_used_bytes": 43978752,
+                "peak_memory_used_bytes": 785428480,
+                "extra": {}
             }
         ]
     },
     {
         "run": 2,
-        "multiplier": 200,
-        "worker_count": 1000,
+        "multiplier": 15000,
+        "worker_count": 75000,
         "phases": [
             {
                 "name": "fill",
-                "time_ms": 670.002199999999,
-                "memory_used_bytes": 1044480,
-                "peak_memory_used_bytes": 1260106,
+                "time_ms": 8938.870500000121,
+                "memory_used_bytes": 42229760,
+                "peak_memory_used_bytes": 42250240,
                 "extra": {
-                    "rendered_content_bytes": 248561,
-                    "tracemalloc_current_bytes": 513517,
-                    "tracemalloc_peak_bytes": 1260106
+                    "rendered_content_bytes": 18570961
                 }
             },
             {
                 "name": "export",
-                "time_ms": 865.2748999998039,
-                "memory_used_bytes": 4096,
-                "peak_memory_used_bytes": 49045504,
+                "time_ms": 336792.4597000001,
+                "memory_used_bytes": -802816,
+                "peak_memory_used_bytes": 772706304,
                 "extra": {
-                    "child_process_peak_bytes": 49045504
+                    "child_process_peak_bytes": 772706304
                 }
             },
             {
                 "name": "total",
-                "time_ms": 3969.7863000001234,
-                "memory_used_bytes": 1052672,
-                "peak_memory_used_bytes": 49045504,
-                "extra": {
-                    "tracemalloc_current_bytes": 0,
-                    "tracemalloc_peak_bytes": 0
-                }
+                "time_ms": 345790.6820000007,
+                "memory_used_bytes": 41426944,
+                "peak_memory_used_bytes": 772706304,
+                "extra": {}
             }
         ]
     },
     {
         "run": 3,
-        "multiplier": 200,
-        "worker_count": 1000,
+        "multiplier": 15000,
+        "worker_count": 75000,
         "phases": [
             {
                 "name": "fill",
-                "time_ms": 715.058400000089,
-                "memory_used_bytes": 770048,
-                "peak_memory_used_bytes": 1268857,
+                "time_ms": 9890.293300000849,
+                "memory_used_bytes": 42156032,
+                "peak_memory_used_bytes": 42176512,
                 "extra": {
-                    "rendered_content_bytes": 248561,
-                    "tracemalloc_current_bytes": 522380,
-                    "tracemalloc_peak_bytes": 1268857
+                    "rendered_content_bytes": 18570961
                 }
             },
             {
                 "name": "export",
-                "time_ms": 932.2306000003664,
-                "memory_used_bytes": 4096,
-                "peak_memory_used_bytes": 49287168,
+                "time_ms": 351473.7579999983,
+                "memory_used_bytes": 0,
+                "peak_memory_used_bytes": 772976640,
                 "extra": {
-                    "child_process_peak_bytes": 49287168
+                    "child_process_peak_bytes": 772976640
                 }
             },
             {
                 "name": "total",
-                "time_ms": 1712.8015999996933,
-                "memory_used_bytes": 774144,
-                "peak_memory_used_bytes": 49287168,
-                "extra": {
-                    "tracemalloc_current_bytes": 0,
-                    "tracemalloc_peak_bytes": 0
-                }
+                "time_ms": 361424.47960000025,
+                "memory_used_bytes": 41107456,
+                "peak_memory_used_bytes": 772976640,
+                "extra": {}
             }
         ]
     },
     {
         "run": 4,
-        "multiplier": 200,
-        "worker_count": 1000,
+        "multiplier": 15000,
+        "worker_count": 75000,
         "phases": [
             {
                 "name": "fill",
-                "time_ms": 708.4472999999889,
-                "memory_used_bytes": 1040384,
-                "peak_memory_used_bytes": 1261354,
+                "time_ms": 9135.732499998994,
+                "memory_used_bytes": 43442176,
+                "peak_memory_used_bytes": 43462656,
                 "extra": {
-                    "rendered_content_bytes": 248561,
-                    "tracemalloc_current_bytes": 514821,
-                    "tracemalloc_peak_bytes": 1261354
+                    "rendered_content_bytes": 18570961
                 }
             },
             {
                 "name": "export",
-                "time_ms": 866.0927000000811,
-                "memory_used_bytes": 0,
-                "peak_memory_used_bytes": 48893952,
+                "time_ms": 352382.1289999996,
+                "memory_used_bytes": -20480,
+                "peak_memory_used_bytes": 772952064,
                 "extra": {
-                    "child_process_peak_bytes": 48893952
+                    "child_process_peak_bytes": 772952064
                 }
             },
             {
                 "name": "total",
-                "time_ms": 1639.5194000001538,
-                "memory_used_bytes": 1040384,
-                "peak_memory_used_bytes": 48893952,
-                "extra": {
-                    "tracemalloc_current_bytes": 0,
-                    "tracemalloc_peak_bytes": 0
-                }
+                "time_ms": 361578.1396000002,
+                "memory_used_bytes": 43421696,
+                "peak_memory_used_bytes": 772952064,
+                "extra": {}
             }
         ]
     },
     {
         "run": 5,
-        "multiplier": 200,
-        "worker_count": 1000,
+        "multiplier": 15000,
+        "worker_count": 75000,
         "phases": [
             {
                 "name": "fill",
-                "time_ms": 759.0730000001713,
-                "memory_used_bytes": 1019904,
-                "peak_memory_used_bytes": 1261581,
+                "time_ms": 9050.429599999916,
+                "memory_used_bytes": 40300544,
+                "peak_memory_used_bytes": 40321024,
                 "extra": {
-                    "rendered_content_bytes": 248561,
-                    "tracemalloc_current_bytes": 515020,
-                    "tracemalloc_peak_bytes": 1261581
+                    "rendered_content_bytes": 18570961
                 }
             },
             {
                 "name": "export",
-                "time_ms": 937.6889999998639,
-                "memory_used_bytes": 0,
-                "peak_memory_used_bytes": 48914432,
+                "time_ms": 353997.0739,
+                "memory_used_bytes": -11407360,
+                "peak_memory_used_bytes": 772960256,
                 "extra": {
-                    "child_process_peak_bytes": 48914432
+                    "child_process_peak_bytes": 772960256
                 }
             },
             {
                 "name": "total",
-                "time_ms": 1773.116100000152,
-                "memory_used_bytes": 1019904,
-                "peak_memory_used_bytes": 48914432,
-                "extra": {
-                    "tracemalloc_current_bytes": 0,
-                    "tracemalloc_peak_bytes": 0
-                }
+                "time_ms": 363106.19849999965,
+                "memory_used_bytes": 28893184,
+                "peak_memory_used_bytes": 772960256,
+                "extra": {}
             }
         ]
     },
     {
         "run": 6,
-        "multiplier": 200,
-        "worker_count": 1000,
+        "multiplier": 15000,
+        "worker_count": 75000,
         "phases": [
             {
                 "name": "fill",
-                "time_ms": 752.0233000000189,
-                "memory_used_bytes": 1150976,
-                "peak_memory_used_bytes": 1261787,
+                "time_ms": 9045.787299999574,
+                "memory_used_bytes": 39284736,
+                "peak_memory_used_bytes": 39305216,
                 "extra": {
-                    "rendered_content_bytes": 248561,
-                    "tracemalloc_current_bytes": 515592,
-                    "tracemalloc_peak_bytes": 1261787
+                    "rendered_content_bytes": 18570961
                 }
             },
             {
                 "name": "export",
-                "time_ms": 993.5971999998401,
-                "memory_used_bytes": 0,
-                "peak_memory_used_bytes": 48955392,
+                "time_ms": 353672.45550000004,
+                "memory_used_bytes": -2142208,
+                "peak_memory_used_bytes": 772804608,
                 "extra": {
-                    "child_process_peak_bytes": 48955392
+                    "child_process_peak_bytes": 772804608
                 }
             },
             {
                 "name": "total",
-                "time_ms": 1816.7308000001867,
-                "memory_used_bytes": 1150976,
-                "peak_memory_used_bytes": 48955392,
-                "extra": {
-                    "tracemalloc_current_bytes": 0,
-                    "tracemalloc_peak_bytes": 0
-                }
+                "time_ms": 362767.6962000005,
+                "memory_used_bytes": 37142528,
+                "peak_memory_used_bytes": 772804608,
+                "extra": {}
             }
         ]
     },
     {
         "run": 7,
-        "multiplier": 200,
-        "worker_count": 1000,
+        "multiplier": 15000,
+        "worker_count": 75000,
         "phases": [
             {
                 "name": "fill",
-                "time_ms": 753.7813000003553,
-                "memory_used_bytes": 909312,
-                "peak_memory_used_bytes": 1261011,
+                "time_ms": 9392.017399999531,
+                "memory_used_bytes": 36737024,
+                "peak_memory_used_bytes": 37601280,
                 "extra": {
-                    "rendered_content_bytes": 248561,
-                    "tracemalloc_current_bytes": 514358,
-                    "tracemalloc_peak_bytes": 1261011
+                    "rendered_content_bytes": 18570961
                 }
             },
             {
                 "name": "export",
-                "time_ms": 867.4324999997225,
-                "memory_used_bytes": 0,
-                "peak_memory_used_bytes": 49274880,
+                "time_ms": 350513.3139999998,
+                "memory_used_bytes": -1314816,
+                "peak_memory_used_bytes": 772857856,
                 "extra": {
-                    "child_process_peak_bytes": 49274880
+                    "child_process_peak_bytes": 772857856
                 }
             },
             {
                 "name": "total",
-                "time_ms": 1706.5538000001652,
-                "memory_used_bytes": 909312,
-                "peak_memory_used_bytes": 49274880,
-                "extra": {
-                    "tracemalloc_current_bytes": 0,
-                    "tracemalloc_peak_bytes": 0
-                }
+                "time_ms": 359955.1757999998,
+                "memory_used_bytes": 35422208,
+                "peak_memory_used_bytes": 772857856,
+                "extra": {}
             }
         ]
     },
     {
         "run": 8,
-        "multiplier": 200,
-        "worker_count": 1000,
+        "multiplier": 15000,
+        "worker_count": 75000,
         "phases": [
             {
                 "name": "fill",
-                "time_ms": 726.4193000000887,
-                "memory_used_bytes": 262144,
-                "peak_memory_used_bytes": 1261472,
+                "time_ms": 9265.40120000027,
+                "memory_used_bytes": 38023168,
+                "peak_memory_used_bytes": 38043648,
                 "extra": {
-                    "rendered_content_bytes": 248561,
-                    "tracemalloc_current_bytes": 514739,
-                    "tracemalloc_peak_bytes": 1261472
+                    "rendered_content_bytes": 18570961
                 }
             },
             {
                 "name": "export",
-                "time_ms": 925.6067000001167,
-                "memory_used_bytes": 0,
-                "peak_memory_used_bytes": 49123328,
+                "time_ms": 333272.1867,
+                "memory_used_bytes": -872448,
+                "peak_memory_used_bytes": 773783552,
                 "extra": {
-                    "child_process_peak_bytes": 49123328
+                    "child_process_peak_bytes": 773783552
                 }
             },
             {
                 "name": "total",
-                "time_ms": 1717.3887999997532,
-                "memory_used_bytes": 262144,
-                "peak_memory_used_bytes": 49123328,
-                "extra": {
-                    "tracemalloc_current_bytes": 0,
-                    "tracemalloc_peak_bytes": 0
-                }
+                "time_ms": 342599.678999999,
+                "memory_used_bytes": 37150720,
+                "peak_memory_used_bytes": 773783552,
+                "extra": {}
             }
         ]
     },
     {
         "run": 9,
-        "multiplier": 200,
-        "worker_count": 1000,
+        "multiplier": 15000,
+        "worker_count": 75000,
         "phases": [
             {
                 "name": "fill",
-                "time_ms": 901.9133000001602,
-                "memory_used_bytes": 90112,
-                "peak_memory_used_bytes": 1262419,
+                "time_ms": 8906.706800000393,
+                "memory_used_bytes": 38023168,
+                "peak_memory_used_bytes": 39088128,
                 "extra": {
-                    "rendered_content_bytes": 248561,
-                    "tracemalloc_current_bytes": 515886,
-                    "tracemalloc_peak_bytes": 1262419
+                    "rendered_content_bytes": 18570961
                 }
             },
             {
                 "name": "export",
-                "time_ms": 870.5776000001606,
-                "memory_used_bytes": 0,
-                "peak_memory_used_bytes": 49291264,
+                "time_ms": 331180.2614999997,
+                "memory_used_bytes": -4096,
+                "peak_memory_used_bytes": 772784128,
                 "extra": {
-                    "child_process_peak_bytes": 49291264
+                    "child_process_peak_bytes": 772784128
                 }
             },
             {
                 "name": "total",
-                "time_ms": 1839.6843000000445,
-                "memory_used_bytes": 90112,
-                "peak_memory_used_bytes": 49291264,
-                "extra": {
-                    "tracemalloc_current_bytes": 0,
-                    "tracemalloc_peak_bytes": 0
-                }
+                "time_ms": 340146.1119000014,
+                "memory_used_bytes": 38019072,
+                "peak_memory_used_bytes": 772784128,
+                "extra": {}
             }
         ]
     }

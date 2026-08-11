@@ -46,6 +46,12 @@ public class PhaseTimer implements AutoCloseable {
         startSampling();
     }
 
+    private static long sampleRss() {
+        OSProcess process = OS.getProcess(PID);
+
+        return process != null ? process.getResidentSetSize() : 0;
+    }
+
     public long getPeakMemoryUsedBytes() {
         return peakRssBytes - startRssBytes;
     }
@@ -106,12 +112,6 @@ public class PhaseTimer implements AutoCloseable {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-    }
-
-    private static long sampleRss() {
-        OSProcess process = OS.getProcess(PID);
-
-        return process != null ? process.getResidentSetSize() : 0;
     }
 
     @Override
