@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.1.final using JasperReports Library version 6.2.1  -->
-<!-- 2026-08-10T21:32:38 -->
+<!-- 2026-08-11T17:27:41 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CompanyReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f4c2e7b1-7d9d-4c7a-91e2-123456789001">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="edc_json_adapter"/>
 	<subDataset name="WorkersDataset" uuid="f4c2e7b1-7d9d-4c7a-91e2-123456789002">
 		<queryString language="JSON">
-			<![CDATA[workers]]>
+			<![CDATA[users]]>
 		</queryString>
 		<field name="Id" class="java.lang.String">
 			<fieldDescription><![CDATA[Id]]></fieldDescription>
@@ -65,6 +65,9 @@
 	<field name="postal_code" class="java.lang.String">
 		<fieldDescription><![CDATA[postal_code]]></fieldDescription>
 	</field>
+	<field name="date_format" class="java.lang.String">
+		<fieldDescription><![CDATA[date_format]]></fieldDescription>
+	</field>
 	<title>
 		<band height="105">
 			<staticText>
@@ -95,7 +98,7 @@ Poročilo o]]></text>
 			</textField>
 			<textField pattern="MMMMM dd, yyyy">
 				<reportElement x="100" y="30" width="100" height="20" uuid="221e0d89-9826-42fa-9e20-ff6ed450ef01"/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{date_format}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -212,8 +215,8 @@ Poročilo o]]></text>
 			<componentElement>
 				<reportElement x="0" y="35" width="555" height="55" uuid="30000000-0000-0000-0000-000000000002"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="WorkersDataset" uuid="30000000-0000-0000-0000-000000000003">
-						<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("workers")]]></dataSourceExpression>
+					<datasetRun subDataset="WorkersDataset" uuid="a8806717-45e0-46b4-9618-e7c3cca0f7af">
+						<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("users")]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="110" uuid="30000000-0000-0000-0000-000000000004">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
@@ -240,7 +243,7 @@ Poročilo o]]></text>
 									<font fontName="DejaVu Sans" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{Id}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -269,7 +272,7 @@ Poročilo o]]></text>
 									<font fontName="DejaVu Sans" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{first_name}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -298,7 +301,7 @@ Poročilo o]]></text>
 									<font fontName="DejaVu Sans" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{first_name}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{last_name}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -327,7 +330,7 @@ Poročilo o]]></text>
 									<font fontName="DejaVu Sans" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{last_name}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -356,7 +359,7 @@ Poročilo o]]></text>
 									<font fontName="DejaVu Sans" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{phone_number}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[($F{phone_number} != null ? $F{phone_number}: "")]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -443,7 +446,7 @@ Poročilo o]]></text>
 									<font fontName="DejaVu Sans" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{is_superuser}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[($F{is_superuser} == "true" ? "Da": "NE")]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

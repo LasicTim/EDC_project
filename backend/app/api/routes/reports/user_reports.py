@@ -57,14 +57,14 @@ def create_user_reports_v2(company: companies.GetCompany, db: Session = Depends(
         out_file_name = 'Izpis_delavcev'
         out_file_format = 'pdf'
         report_stats = []
-        data_multipliers = [2,20,200,2000]#15000 # this multiplies data [2,20,200,2000]
+        data_multipliers = [2,20,200,2000,15000]#2000,15000 # this multiplies data [2,20,200,2000]
         runs = 10 # 10
         report = None
         for multiplier in data_multipliers:
             for run in range(runs):
                 workers = all_workers * multiplier
                 report = Report_V2(template_name, out_file_name, out_file_format)
-                metrics = report.render({"users": workers }, verbose=False)
+                metrics = report.render({"users": workers }, verbose=True)
                 report_stats.append({
                     "run": run,
                     "multiplier": multiplier,
@@ -114,7 +114,7 @@ def create_user_reports_jasper(company: companies.GetCompany, db: Session = Depe
         out_file_format = 'pdf'
 
         report_stats = []
-        data_multipliers = [2,20,200,2000]#15000  # this multiplies data [2,20,200,2000] ## 100000 dobimo blank
+        data_multipliers = [2,20,200,2000,15000]#15000  # this multiplies data [2,20,200,2000] ## 100000 dobimo blank
         runs = 10  # 10
         report = None
         status = False
@@ -155,6 +155,7 @@ def create_company_report_jasper(company: companies.GetCompany, db: Session = De
         template_name = get_jasper_template_path("company_report.jrxml")
         out_file_name = 'Izpis_podjetja'
         out_file_format = 'pdf'
+        all_data["date_format"] = datetime.datetime.now().strftime("%Y-%m-%d")
 
         report = Report_Jasper(template_name, out_file_name, out_file_format, all_data)
         status, msg, metrics = report.generate(verbose=False)

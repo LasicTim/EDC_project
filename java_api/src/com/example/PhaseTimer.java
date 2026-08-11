@@ -1,25 +1,30 @@
 package com.example;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
+import com.sun.jna.platform.win32.Kernel32;
+import oshi.SystemInfo;
+import oshi.software.os.OSProcess;
+import oshi.software.os.OperatingSystem;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PhaseTimer implements AutoCloseable {
-    private static final MemoryMXBean MEMORY_BEAN = ManagementFactory.getMemoryMXBean();
     private static final long SETTLE_MS = 10;
     private static final long SAMPLE_INTERVAL_MS = 10;
+
+    private static final SystemInfo SYSTEM_INFO = new SystemInfo();
+    private static final OperatingSystem OS = SYSTEM_INFO.getOperatingSystem();
+    private static final int PID = Kernel32.INSTANCE.GetCurrentProcessId();
 
     private final String name;
     private final List<Map<String, Object>> phases;
     private final boolean gcCollect;
     private final long startTimeNanos;
-    private final long startHeapUsedBytes;
+    private final long startRssBytes;
 
-    private volatile long peakHeapUsedBytes;
+    private volatile long peakRssBytes;
     private volatile boolean sampling;
-
     private Thread samplerThread;
 
     private final Map<String, Object> extra = new LinkedHashMap<>();
@@ -33,10 +38,20 @@ public class PhaseTimer implements AutoCloseable {
         this.phases = phases;
         this.gcCollect = gcCollect;
         settle();
+
         this.startTimeNanos = System.nanoTime();
-        this.startHeapUsedBytes = sampleHeapUsed();
-        this.peakHeapUsedBytes = this.startHeapUsedBytes;
+        this.startRssBytes = sampleRss();
+        this.peakRssBytes = startRssBytes;
+
         startSampling();
+    }
+
+    public long getPeakMemoryUsedBytes() {
+        return peakRssBytes - startRssBytes;
+    }
+
+    public void setPeakMemoryUsedBytes(long peakMemoryUsedBytes) {
+        this.peakRssBytes = this.startRssBytes + peakMemoryUsedBytes;
     }
 
     public void putExtra(String key, Object value) {
@@ -48,10 +63,10 @@ public class PhaseTimer implements AutoCloseable {
 
         samplerThread = new Thread(() -> {
             while (sampling) {
-                long currentHeapUsedBytes = sampleHeapUsed();
+                long currentRssBytes = sampleRss();
 
-                if (currentHeapUsedBytes > peakHeapUsedBytes) {
-                    peakHeapUsedBytes = currentHeapUsedBytes;
+                if (currentRssBytes > peakRssBytes) {
+                    peakRssBytes = currentRssBytes;
                 }
 
                 try {
@@ -83,7 +98,9 @@ public class PhaseTimer implements AutoCloseable {
         if (!gcCollect) {
             return;
         }
+
         System.gc();
+
         try {
             Thread.sleep(SETTLE_MS);
         } catch (InterruptedException e) {
@@ -91,23 +108,25 @@ public class PhaseTimer implements AutoCloseable {
         }
     }
 
-    private static long sampleHeapUsed() {
-        return MEMORY_BEAN.getHeapMemoryUsage().getUsed();
+    private static long sampleRss() {
+        OSProcess process = OS.getProcess(PID);
+
+        return process != null ? process.getResidentSetSize() : 0;
     }
 
     @Override
     public void close() {
         stopSampling();
 
-        // Capture one final sample as a possible peak.
-        long endHeapUsedBytes = sampleHeapUsed();
+        long endRssBytes = sampleRss();
 
-        if (endHeapUsedBytes > peakHeapUsedBytes) {
-            peakHeapUsedBytes = endHeapUsedBytes;
+        if (endRssBytes > peakRssBytes) {
+            peakRssBytes = endRssBytes;
         }
+
         double elapsedMs = (System.nanoTime() - startTimeNanos) / 1_000_000.0;
-        long memoryUsedBytes = endHeapUsedBytes - startHeapUsedBytes;
-        long peakMemoryUsedBytes = peakHeapUsedBytes - startHeapUsedBytes;
+        long memoryUsedBytes = endRssBytes - startRssBytes;
+        long peakMemoryUsedBytes = getPeakMemoryUsedBytes();
 
         Map<String, Object> phase = new LinkedHashMap<>();
         phase.put("name", name);
@@ -115,6 +134,7 @@ public class PhaseTimer implements AutoCloseable {
         phase.put("memory_used_bytes", memoryUsedBytes);
         phase.put("peak_memory_used_bytes", peakMemoryUsedBytes);
         phase.put("extra", extra);
+
         phases.add(phase);
     }
 }

@@ -51,6 +51,10 @@ public class JasperReportServlet extends HttpServlet {
         List<Map<String, Object>> phases = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
 
+        PhaseTimer compilePhase;
+        PhaseTimer fillPhase;
+        PhaseTimer exportPhase;
+
         try {
             // total wraps everything below;
             try (PhaseTimer total = new PhaseTimer("total", phases, true)) {
@@ -83,7 +87,7 @@ public class JasperReportServlet extends HttpServlet {
 
                 // COMPILE
                 JasperReport jasperReport;
-                try (PhaseTimer compilePhase = new PhaseTimer("compile", phases)) {
+                try (PhaseTimer phase = new PhaseTimer("compile", phases)) {
                     logger.info("Compiling JRXML template: " + templateFile);
                     try {
                         String jrxml = Files.readString(Paths.get(templateFile), StandardCharsets.UTF_8);
@@ -99,25 +103,36 @@ public class JasperReportServlet extends HttpServlet {
                         out.write("{\"status\":\"error\",\"message\":\"JRXML file read failed: " + ioEx.getMessage() + "\"}");
                         return;
                     }
+                    compilePhase = phase;
                 }
 
                 // FILL
                 JasperPrint jasperPrint;
-                try (PhaseTimer fillPhase = new PhaseTimer("fill", phases);
+                try (PhaseTimer phase = new PhaseTimer("fill", phases);
                      InputStream jsonStream = new ByteArrayInputStream(dataJson.getBytes(StandardCharsets.UTF_8))) {
                     JsonDataSource dataSource = new JsonDataSource(jsonStream, "root");
                     jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
-                    fillPhase.putExtra("page_count", jasperPrint.getPages().size());
+                    phase.putExtra("page_count", jasperPrint.getPages().size());
+                    fillPhase = phase;
                 }
 
                 // EXPORT
-                try (PhaseTimer exportPhase = new PhaseTimer("export", phases)) {
+                try (PhaseTimer phase = new PhaseTimer("export", phases)) {
                     JRPdfExporter exporter = new JRPdfExporter();
                     exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
                     exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputFile));
                     exporter.setConfiguration(new SimplePdfExporterConfiguration());
                     exporter.exportReport();
+                    exportPhase = phase;
                 }
+
+                total.setPeakMemoryUsedBytes(
+                    Math.max(
+                        compilePhase.getPeakMemoryUsedBytes(),
+                        Math.max(fillPhase.getPeakMemoryUsedBytes(),
+                                exportPhase.getPeakMemoryUsedBytes())
+                    )
+                );
             }
 
             // Only now does `phases` actually contain compile/fill/export/total.

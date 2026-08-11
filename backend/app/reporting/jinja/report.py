@@ -103,15 +103,17 @@ class Report_V2:
     def render(self, context: dict, verbose: bool = True) -> "RenderMetrics":
         metrics = RenderMetrics(enabled=self.measure_memory)
 
-        with metrics.phase("total", gc_collect=True, use_tracemalloc=True) as total:
+        with metrics.phase("total", gc_collect=True, use_tracemalloc=False) as total:
             # FILL
-            with metrics.phase("fill", use_tracemalloc=True) as fill:
+            with metrics.phase("fill", use_tracemalloc=False) as fill:
                 rendered_content = self.template.render(context)
                 if self.measure_memory:
                     fill.extra["rendered_content_bytes"] = len(rendered_content.encode("utf-8"))
 
             # EXPORT
             with metrics.phase("export") as export:
+                child_peak = 0
+
                 if self.output_format == "html":
                     with open(self.output_file_name, "w", encoding="utf-8") as f:
                         f.write(rendered_content)
@@ -125,9 +127,12 @@ class Report_V2:
                         if child_monitor:
                             child_monitor.stop()
                             child_peak = child_monitor.get_peak()
-                            export.memory_used_bytes += child_peak
-                            export.peak_memory_used_bytes += child_peak
                             export.extra["child_process_peak_bytes"] = child_peak
+
+            export.peak_memory_used_bytes = max(export.peak_memory_used_bytes, child_peak)
+
+        if self.measure_memory:
+            total.peak_memory_used_bytes = max(fill.peak_memory_used_bytes, export.peak_memory_used_bytes)
 
         if verbose:
             metrics.print_summary("\n--- Jinja2 PERFORMANCE METRICS ---")
